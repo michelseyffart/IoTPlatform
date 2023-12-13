@@ -21,7 +21,8 @@ def openhab_request(endpoint: str, method, payload: dict = None):
     response = requests.request(method, _url, headers=headers, data=payload)
     if response.ok:
         print(response.text)
-        return response
+        return response.status_code
     else:
         print(f"Error: {response.status_code}")
         print(response.text)
+        return response.status_code
