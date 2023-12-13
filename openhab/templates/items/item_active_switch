@@ -1,0 +1,14 @@
+{
+  "stateDescription": {
+    "pattern": "%s",
+    "readOnly": true,
+    "options": []
+  },
+  "editable": true,
+  "type": "Switch",
+  "name": "Active_Switch",
+  "label": "Active Switch",
+  "category": "",
+  "tags": [],
+  "groupNames": []
+}

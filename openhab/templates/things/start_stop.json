@@ -1,0 +1,27 @@
+{
+  "editable": true,
+  "label": "Start and Stop",
+  "bridgeUID": "BRIDGE_UID",
+  "configuration": {},
+  "properties": {},
+  "UID": "THING_UID",
+  "thingTypeUID": "mqtt:topic",
+  "channels": [
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:Start_Stop",
+      "id": "Start_Stop",
+      "channelTypeUID": "mqtt:switch",
+      "kind": "STATE",
+      "label": "Start Stop",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "active",
+        "off": "stop",
+        "on": "start"
+      }
+    }
+  ]
+}

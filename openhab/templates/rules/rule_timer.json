@@ -1,0 +1,46 @@
+{
+  "uid": "RULE_TIMER_UID",
+  "name": "Timer",
+  "tags": [],
+  "visibility": "VISIBLE",
+  "status": {
+    "status": "UNINITIALIZED",
+    "statusDetail": "DISABLED"
+  },
+  "editable": true,
+  "triggers": [
+    {
+      "id": "1",
+      "label": "Every 5 seconds",
+      "configuration": {
+        "cronExpression": "0/1 * * * *  *"
+      },
+      "type": "timer.GenericCronTrigger"
+    }
+  ],
+  "conditions": [
+    {
+      "inputs": {},
+      "id": "3",
+      "configuration": {
+        "itemName": "Active_Switch",
+        "state": "ON",
+        "operator": "="
+      },
+      "type": "core.ItemStateCondition"
+    }
+  ],
+  "actions": [
+    {
+      "inputs": {},
+      "id": "2",
+      "configuration": {
+        "type": "application/javascript",
+        "script": ""
+      },
+      "type": "script.ScriptAction"
+    }
+  ],
+  "configuration": {},
+  "configDescriptions": []
+}
