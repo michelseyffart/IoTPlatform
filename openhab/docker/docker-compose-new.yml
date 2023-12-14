@@ -33,3 +33,5 @@ volumes:
     driver: local
   openhab_userdata:
     driver: local
+  pyscripts:
+    driver: local
