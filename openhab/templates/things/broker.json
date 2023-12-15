@@ -1,0 +1,30 @@
+{
+  "channels": [],
+  "statusInfo": {
+    "status": "ONLINE",
+    "statusDetail": "NONE"
+  },
+  "editable": true,
+  "label": "MQTT Broker",
+  "configuration": {
+    "lwtQos": 0,
+    "publickeypin": true,
+    "keepAlive": 60,
+    "clientid": "4e4fa6a3-c617-4f14-8f6e-55e684cd98e1",
+    "hostnameValidated": true,
+    "secure": false,
+    "birthRetain": true,
+    "shutdownRetain": false,
+    "certificatepin": true,
+    "protocol": "TCP",
+    "qos": 0,
+    "reconnectTime": 60000,
+    "mqttVersion": "V3",
+    "host": "137.226.248.250",
+    "lwtRetain": true,
+    "enableDiscovery": true
+  },
+  "properties": {},
+  "UID": "THING_MQTT_BROKER_UID",
+  "thingTypeUID": "mqtt:broker"
+}

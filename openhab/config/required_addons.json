@@ -1,0 +1,5 @@
+{
+  "MQTT Binding": "openhab-binding-mqtt",
+  "JSONPath Transformation": "openhab-transformation-jsonpath",
+  "JavaScript Scripting": "openhab-automation-jsscripting"
+}

@@ -2,7 +2,6 @@ import requests
 import json
 
 url = "http://137.226.248.250:8080/rest"
-bridge_uid = "mqtt:broker:58051d64cd"
 
 with open("token") as f:
     token = f.read()
@@ -20,7 +19,7 @@ def openhab_request(endpoint: str, method, payload: dict = None):
     }
     response = requests.request(method, _url, headers=headers, data=payload)
     if response.ok:
-        print(response.text)
+        print(f"Successful: {response.status_code}")
         return response.status_code
     else:
         print(f"Error: {response.status_code}")

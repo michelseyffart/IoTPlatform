@@ -40,3 +40,14 @@ def save_to_config(key, value):
     with open(path, 'w') as f:
         json.dump(config, f, indent=4, sort_keys=True)
         log.info(f"Saved data:\t {key}:\t {value}")
+
+
+def get_required_addons():
+    try:
+        with open("config/required_addons.json", 'r') as f:
+            addons = json.load(f)
+        return addons
+    except KeyError:
+        log.exception(KeyError)
+        return None
+
