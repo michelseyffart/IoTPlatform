@@ -14,5 +14,4 @@ def setup_everything():
 
 
 if __name__ == "__main__":
-    install_all_addons()
     setup_everything()

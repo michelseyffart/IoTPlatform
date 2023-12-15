@@ -1,0 +1,28 @@
+{
+    "optimization": "P2P",
+    "bid_strategy": "learning",
+    "crit_prio": "price",
+    "descending": true,
+    "multi_round": true,
+    "trading_rounds": 0,
+    "flexible_demands": true,
+    "number_typeWeeks": 0,
+    "full_path_scenario": "D:\\jsc-mse\\BA\\districtgenerator\\data\\scenarios\\scenario3.csv",
+    "Dorfnetz": false,
+    "neighborhood": "district01",
+    "ev_share": 0.0,
+    "ev_public": true,
+    "grid": false,
+    "discretization_input_data": 0.25,
+    "path_file": "D:/jsc-mse/Hiwi/P2P_Market",
+    "path_results": "D:/jsc-mse/Hiwi/P2P_Market/results",
+    "time_zone": 1,
+    "location": [
+        51.0,
+        6.55
+    ],
+    "altitude": 0,
+    "nb_bes": 4,
+    "p_max": 0.3287,
+    "p_min": 0.191
+}

@@ -1,6 +1,6 @@
 {
-    "bridge_uid": "mqtt:broker:5c70b4c2",
-    "bridge_uid_short": "5c70b4c2",
-    "rule_timer_uid": "5c831a36",
-    "thing_start_stop_uid": "mqtt:topic:5c70b4c2:e92948ea"
+    "bridge_uid": "mqtt:broker:e9f95a95",
+    "bridge_uid_short": "e9f95a95",
+    "rule_timer_uid": "0b3d8426",
+    "thing_start_stop_uid": "mqtt:topic:e9f95a95:d85382e9"
 }
