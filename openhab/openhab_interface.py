@@ -1,9 +1,10 @@
 import requests
 import json
+from openhab.config.paths import path_token
 
 url = "http://137.226.248.250:8080/rest"
 
-with open("token") as f:
+with open(path_token) as f:
     token = f.read()
 
 

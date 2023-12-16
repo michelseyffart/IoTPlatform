@@ -2,12 +2,13 @@ import uuid
 from openhab.openhab_interface import openhab_request
 from openhab.config.config import *
 import openhab.create_logger as logs
+from openhab.config.paths import *
 
-log = logs.get_logger(filename="logs//setup.log", name="setup")
+log = logs.get_logger(filename="setup.log", name="setup")
 
 
 def post_broker():
-    with open("templates/things/broker.json") as f:
+    with open(path_templates_folder / "things" / "broker.json") as f:
         template_thing_mqtt_broker = f.read()
     uid = str(uuid.uuid4()).split("-")[0]
     bridge_uid = f"mqtt:broker:{uid}"
@@ -26,4 +27,4 @@ def delete_broker():
 
 
 if __name__ == "__main__":
-    post_broker()
+    delete_broker()

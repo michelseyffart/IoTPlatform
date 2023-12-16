@@ -14,4 +14,4 @@ def setup_everything():
 
 
 if __name__ == "__main__":
-    setup_everything()
+    clear_everything()

@@ -1,14 +1,15 @@
 import uuid
 from openhab.openhab_interface import openhab_request
 from openhab.config.config import *
+from openhab.config.paths import *
 import openhab.create_logger as logs
 
-log = logs.get_logger(filename="logs//setup.log", name="timer")
+log = logs.get_logger(filename="setup.log", name="timer")
 
 
 def post_thing_start_stop():
     # create a MQTT binding that allows toggling the Active Switch and therefore starting and stopping the Timer Rule
-    with open("templates/things/start_stop.json") as f:
+    with open(path_templates_folder/"things"/"start_stop.json") as f:
         template_thing_start_stop = f.read()
     uid = str(uuid.uuid4()).split("-")[0]
     bridge_uid = get_from_config(key="bridge_uid")
@@ -25,9 +26,9 @@ def post_thing_start_stop():
 
 def post_rule_timer():
     # create a Timer Rule that triggers an action every given interval
-    with open("templates/rules/rule_timer.json") as f:
+    with open(path_templates_folder/"rules"/"rule_timer.json") as f:
         template_rule_timer = f.read()
-    with open("templates/scripts/script_timer") as f:
+    with open(path_templates_folder/"scripts"/"script_timer") as f:
         script_timer_template = f.read()
     rule_timer_uid = str(uuid.uuid4()).split("-")[0]
     template_rule_timer = template_rule_timer.replace("RULE_TIMER_UID", rule_timer_uid)
@@ -42,7 +43,7 @@ def post_rule_timer():
 
 def post_item_active_switch():
     # create an Active Switch that enables or disables the Timer Rule
-    with open("templates/items/item_active_switch") as f:
+    with open(path_templates_folder/"items"/"item_active_switch") as f:
         item_active_switch = json.load(f)
     rc = openhab_request(payload=item_active_switch, endpoint="/items/Active_Switch", method="PUT")
     log.info(f"Posted Item Active Switch: {rc}")
