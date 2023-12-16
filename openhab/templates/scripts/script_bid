@@ -1,0 +1,20 @@
+var dem
+var sur
+dem = items.getItem("demand_BUILDING_ID").state
+sur = items.getItem("surplus_BUILDING_ID").state
+dem = String(dem)
+sur = String(sur)
+var bid = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "python3", "/openhab/pyscripts/scripts/bid.py", dem, sur)
+buying = bid.split("buying:")[1].split(",")[0]
+quant = bid.split("quant:")[1].split(",")[0]
+quant = parseFloat(quant)
+price = bid.split("price:")[1].split(",")[0]
+price = parseFloat(price)
+
+console.log("buying_bool: ", buying)
+console.log("quant: ", quant)
+console.log("price: ", price)
+
+items.getItem("buying_BUILDING_ID").postUpdate(buying)
+items.getItem("quant_BUILDING_ID").postUpdate(quant)
+items.getItem("price_BUILDING_ID").postUpdate(price)

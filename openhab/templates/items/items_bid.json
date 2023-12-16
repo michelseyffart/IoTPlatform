@@ -1,0 +1,32 @@
+[
+  {
+    "type": "String",
+    "name": "buying_BUILDING_ID",
+    "label": "Buying BUILDING_ID",
+    "category": "",
+    "tags": [],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "quant_BUILDING_ID",
+    "label": "Quantity BUILDING_ID",
+    "category": "",
+    "tags": [],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "price_BUILDING_ID",
+    "label": "Price BUILDING_ID",
+    "category": "",
+    "tags": [],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  }
+]

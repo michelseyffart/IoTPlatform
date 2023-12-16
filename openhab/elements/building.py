@@ -158,6 +158,46 @@ def post_links_building_values(building_id: str):
     log.info(f"Posted Link n_opt {building_id}: {rc}")
 
 
+def post_rule_bid(building_id: str):
+    with open(path_templates_folder/"rules"/"rule_bid.json") as f:
+        template_rule_bid = f.read()
+    with open(path_templates_folder/"scripts"/"script_bid") as f:
+        script_bid_template = f.read()
+    rule_bid_uid = str(uuid.uuid4()).split("-")[0]
+    template_rule_bid = template_rule_bid.replace(
+        "RULE_BID_UID", rule_bid_uid).replace(
+        "BUILDING_ID", building_id)
+    bridge_uid = get_from_config(key="bridge_uid")
+    script_bid = script_bid_template.replace("BUILDING_ID", building_id)
+    rule_bid = json.loads(template_rule_bid)
+    rule_bid["actions"][0]["configuration"]["script"] = script_bid
+    save_to_config(key=f"rule_bid_{building_id}_uid", value=rule_bid_uid)
+    rc = openhab_request(payload=rule_bid, endpoint="/rules", method="POST")
+    log.info(f"Posted Rule Timer {building_id}: {rc}")
+
+
+def post_items_bid(building_id:str):
+    with open(path_templates_folder/"items"/"items_bid.json") as f:
+        items_bid_template = f.read()
+    items_bid_template = items_bid_template.replace("BUILDING_ID", building_id)
+    items_bid = json.loads(items_bid_template)
+    rc = openhab_request(payload=items_bid, endpoint=f"/items/", method="PUT")
+    log.info(f"Posted Items Bid {building_id}: {rc}")
+    with open(path_templates_folder/"metadata"/"metadata_float.json") as f:
+        metadata_float = json.load(f)
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/quant_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Quant {building_id}: {rc}")
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/price_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Price {building_id}: {rc}")
+    with open(path_templates_folder/"metadata"/"metadata_string.json") as f:
+        metadata_string = json.load(f)
+    rc = openhab_request(payload=metadata_string, endpoint=f"/items/buying_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Buying {building_id}: {rc}")
+
+
 def setup_building(building_id: str):
     post_group(building_id)
     post_item_demand(building_id)
@@ -169,6 +209,8 @@ def setup_building(building_id: str):
     post_rule_timer(building_id)
     post_thing_building_topic(building_id)
     post_links_building_values(building_id)
+    post_rule_bid(building_id)
+    post_items_bid(building_id)
 
 
 def clear_building(building_id: str):
@@ -202,7 +244,16 @@ def clear_building(building_id: str):
     log.info(f"Deleted Links for n_opt {building_id}: {rc}")
     rc = openhab_request(endpoint=f"/things/{thing_building_uid}", method="DELETE")
     log.info(f"Deleted Thing Building {building_id}: {rc}")
+    rule_bid_uid = get_from_config(key=f"rule_bid_{building_id}_uid")
+    rc = openhab_request(endpoint=f"/rules/{rule_bid_uid}", method="DELETE")
+    log.info(f"Deleted Rule Bid {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/quant_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Quant {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/price_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Quant {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/buying_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Price {building_id}: {rc}")
 
 
 if __name__ == "__main__":
-    clear_building("0")
+    post_items_bid("0")

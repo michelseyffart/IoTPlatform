@@ -24,4 +24,4 @@ def reset():
 
 
 if __name__ == "__main__":
-    clear_building("0")
+    clear_everything(["0"])

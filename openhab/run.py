@@ -44,7 +44,7 @@ def clear():
     log.info("Clearing complete")
 
 
-if __name__ == "__main__":
+def setup_run_and_clear():
     setup()
     time.sleep(1)
     set_initial_values()
@@ -54,4 +54,7 @@ if __name__ == "__main__":
     stop_buildings()
     time.sleep(1)
     clear()
-    mqttc.disconnect()
+
+
+if __name__ == "__main__":
+    clear()

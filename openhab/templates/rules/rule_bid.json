@@ -1,0 +1,29 @@
+{
+  "uid": "RULE_BID_UID",
+  "name": "Bid BUILDING_ID",
+  "tags": [],
+  "visibility": "VISIBLE",
+  "editable": true,
+  "triggers": [
+     {
+       "id": "1",
+       "configuration": {
+         "itemName": "n_opt_BUILDING_ID"
+         },
+         "type": "core.ItemStateUpdateTrigger"
+        }
+  ],
+  "conditions": [], "actions": [
+    {
+      "inputs": {},
+      "id": "2",
+      "configuration": {
+        "type": "application/javascript;version=ECMAScript-2021",
+        "script": ""
+      },
+      "type": "script.ScriptAction"
+    }
+  ],
+  "configuration": {},
+  "configDescriptions": []
+}
