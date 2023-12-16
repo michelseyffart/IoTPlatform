@@ -5,12 +5,12 @@ formatter = logging.Formatter('%(asctime)s:\t %(levelname)s: %(name)s:\t %(messa
                               datefmt="%H:%M:%S (%d.%m.%y)")
 
 
-def get_logger(filename: str, name: str):
+def get_logger(filename: str, name: str, consolelevel=logging.WARNING):
     handler = logging.FileHandler(path_logs_folder.joinpath(filename))
     handler.setLevel(logging.INFO)
     handler.setFormatter(formatter)
     console = logging.StreamHandler()
-    console.setLevel(logging.WARNING)
+    console.setLevel(consolelevel)
     console.setFormatter(formatter)
 
     logger = logging.getLogger(name)

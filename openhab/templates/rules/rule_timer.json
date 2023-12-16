@@ -13,7 +13,7 @@
       "id": "1",
       "label": "Cron Trigger",
       "configuration": {
-        "cronExpression": "0/1 * * * *  *"
+        "cronExpression": "RANDOM_START/LENGTH * * * *  *"
       },
       "type": "timer.GenericCronTrigger"
     }

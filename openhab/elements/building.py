@@ -1,3 +1,4 @@
+import random
 import uuid
 from openhab.openhab_interface import openhab_request
 from openhab.config.config import *
@@ -103,9 +104,14 @@ def post_rule_timer(building_id: str):
     with open(path_templates_folder/"scripts"/"script_timer") as f:
         script_timer_template = f.read()
     rule_timer_uid = str(uuid.uuid4()).split("-")[0]
+    param_time_for_step = get_from_params("time_for_step")
+    param_random_start = get_from_params("range_for_random_start")
+    random_start = random.randint(0, param_random_start)
     template_rule_timer = template_rule_timer.replace(
         "RULE_TIMER_UID", rule_timer_uid).replace(
-        "BUILDING_ID", building_id)
+        "BUILDING_ID", building_id).replace(
+        "RANDOM_START", str(random_start)).replace(
+        "LENGTH", str(param_time_for_step))
     bridge_uid = get_from_config(key="bridge_uid")
     script_timer = script_timer_template.replace(
         "BRIDGE_UID", bridge_uid).replace(
@@ -199,4 +205,4 @@ def clear_building(building_id: str):
 
 
 if __name__ == "__main__":
-    setup_building("0")
+    clear_building("0")

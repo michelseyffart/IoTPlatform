@@ -4,6 +4,7 @@ from openhab.config.paths import *
 from pathlib import Path
 
 path_config_file = path_config_folder.joinpath("config.json")
+path_params_file = path_config_folder.joinpath("params.json")
 
 log = logs.get_logger(name="config", filename="config.log")
 
@@ -49,6 +50,20 @@ def get_required_addons():
         with open("config/required_addons.json", 'r') as f:
             addons = json.load(f)
         return addons
+    except KeyError:
+        log.exception(KeyError)
+        return None
+
+
+def get_from_params(key):
+    try:
+        with open(path_params_file, 'r') as f:
+            params = json.load(f)
+    except json.decoder.JSONDecodeError:
+        log.warning(msg="Nothing in the params file.")
+        return None
+    try:
+        return params[key]
     except KeyError:
         log.exception(KeyError)
         return None

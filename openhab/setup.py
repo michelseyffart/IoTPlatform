@@ -5,14 +5,16 @@ from elements.addons import install_all_addons
 from elements.broker import setup_mqtt_structure, delete_mqtt_structure
 
 
-def clear_everything():
-    clear_building("0")
+def clear_everything(buildings: list):
+    for building in buildings:
+        clear_building(building)
     delete_mqtt_structure()
 
 
-def setup_everything():
+def setup_everything(buildings: list):
     setup_mqtt_structure()
-    setup_building("1")
+    for building in buildings:
+        setup_building(building)
 
 
 def reset():
@@ -22,4 +24,4 @@ def reset():
 
 
 if __name__ == "__main__":
-    setup_building("1")
+    clear_building("0")

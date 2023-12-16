@@ -1,10 +1,17 @@
 {
-    "bridge_uid": "mqtt:broker:45d813c8",
-    "bridge_uid_short": "45d813c8",
-    "rule_timer_0_uid": "c1f7bc5d",
-    "rule_timer_1_uid": "294e319e",
+    "bridge_uid": "mqtt:broker:23bc0299",
+    "bridge_uid_short": "23bc0299",
+    "rule_timer_0_uid": "d8a775eb",
+    "rule_timer_1_uid": "7004575f",
+    "rule_timer_2_uid": "5ec1bf3b",
+    "rule_timer_3_uid": "9364d34a",
+    "rule_timer_testuid_uid": "88a2a62a",
     "rule_timer_uid": "ed555085",
-    "thing_building_0_uid": "mqtt:topic:45d813c8:bd9f1176",
-    "thing_start_stop_uid": "mqtt:topic:45d813c8:5b8b33ff",
+    "thing_building_0_uid": "mqtt:topic:23bc0299:e94ab490",
+    "thing_building_1_uid": "mqtt:topic:23bc0299:63f82ec6",
+    "thing_building_2_uid": "mqtt:topic:23bc0299:230a37a3",
+    "thing_building_3_uid": "mqtt:topic:23bc0299:a685b8a0",
+    "thing_building_testuid_uid": "mqtt:topic:45d813c8:1148fac3",
+    "thing_start_stop_uid": "mqtt:topic:23bc0299:0c81249a",
     "url_rest": "http://137.226.248.250:8080/rest"
 }

@@ -1,9 +1,12 @@
 import requests
 import json
+import logging
 from openhab.config.paths import path_token
 from openhab.config.config import *
+import openhab.create_logger as logs
 
-#url = "http://137.226.248.250:8080/rest"
+log = logs.get_logger(filename="http.log", name="http", consolelevel=logging.WARNING)
+
 url = get_from_config("url_rest")
 
 with open(path_token) as f:
@@ -22,9 +25,8 @@ def openhab_request(endpoint: str, method, payload: dict = None):
     }
     response = requests.request(method, _url, headers=headers, data=payload)
     if response.ok:
-        print(f"Successful: {response.status_code}")
+        log.info(f"Successful: {response.status_code}")
         return response.status_code
     else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
+        log.warning(f"Error: {response.status_code}\n{response.text}")
         return response.status_code
