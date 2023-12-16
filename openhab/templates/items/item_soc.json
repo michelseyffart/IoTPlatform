@@ -1,0 +1,10 @@
+{
+  "type": "Number",
+  "name": "soc_BUILDING_ID",
+  "label": "Soc BUILDING_ID",
+  "category": "",
+  "tags": [],
+  "groupNames": [
+    "building_BUILDING_ID"
+  ]
+}

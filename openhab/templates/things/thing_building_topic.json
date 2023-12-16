@@ -1,0 +1,40 @@
+{
+  "label": "Building BUILDING_ID",
+  "bridgeUID": "BRIDGE_UID",
+  "configuration": {},
+  "properties": {},
+  "UID": "THING_UID",
+  "thingTypeUID": "mqtt:topic",
+  "channels": [
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:soc_BUILDING_ID",
+      "id": "soc_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "soc BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "BUILDING_ID/soc"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:n_opt_BUILDING_ID",
+      "id": "n_opt_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "n_opt BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "BUILDING_ID/n_opt"
+      }
+    }
+  ]
+}

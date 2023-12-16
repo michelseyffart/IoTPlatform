@@ -1,0 +1,2 @@
+var payload = "Test";
+actions.get('mqtt', 'BRIDGE_UID').publishMQTT('0/json/forecast/building0/attrs', JSON.stringify(payload), 'FALSE' === 'TRUE');

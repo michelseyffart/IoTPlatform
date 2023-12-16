@@ -1,0 +1,10 @@
+{
+  "type": "Number",
+  "name": "n_opt_BUILDING_ID",
+  "label": "Optimization Step BUILDING_ID",
+  "category": "",
+  "tags": [],
+  "groupNames": [
+    "building_BUILDING_ID"
+  ]
+}

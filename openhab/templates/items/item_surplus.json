@@ -1,0 +1,10 @@
+{
+  "type": "Number",
+  "name": "surplus_BUILDING_ID",
+  "label": "Surplus BUILDING_ID",
+  "category": "",
+  "tags": [],
+  "groupNames": [
+    "building_BUILDING_ID"
+  ]
+}

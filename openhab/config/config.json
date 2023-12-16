@@ -1,6 +1,10 @@
 {
-    "bridge_uid": "mqtt:broker:daa22f51",
-    "bridge_uid_short": "daa22f51",
-    "rule_timer_uid": "a2e804d3",
-    "thing_start_stop_uid": "mqtt:topic:ebfa2a44:2833d600"
+    "bridge_uid": "mqtt:broker:45d813c8",
+    "bridge_uid_short": "45d813c8",
+    "rule_timer_0_uid": "c1f7bc5d",
+    "rule_timer_1_uid": "294e319e",
+    "rule_timer_uid": "ed555085",
+    "thing_building_0_uid": "mqtt:topic:45d813c8:bd9f1176",
+    "thing_start_stop_uid": "mqtt:topic:45d813c8:5b8b33ff",
+    "url_rest": "http://137.226.248.250:8080/rest"
 }

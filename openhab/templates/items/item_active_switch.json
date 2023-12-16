@@ -1,0 +1,10 @@
+{
+  "type": "Switch",
+  "name": "active_switch_BUILDING_ID",
+  "label": "Active Switch BUILDING_ID",
+  "category": "",
+  "tags": [],
+  "groupNames": [
+    "building_BUILDING_ID"
+  ]
+}

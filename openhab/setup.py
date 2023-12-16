@@ -1,17 +1,25 @@
-from elements.timer import setup_timer, clear_timer
+import time
+
+from elements.building import setup_building, clear_building
 from elements.addons import install_all_addons
-from elements.broker import post_broker, delete_broker
+from elements.broker import setup_mqtt_structure, delete_mqtt_structure
 
 
 def clear_everything():
-    clear_timer()
-    delete_broker()
+    clear_building("0")
+    delete_mqtt_structure()
 
 
 def setup_everything():
-    post_broker()
-    setup_timer()
+    setup_mqtt_structure()
+    setup_building("1")
+
+
+def reset():
+    clear_everything()
+    time.sleep(2)
+    setup_everything()
 
 
 if __name__ == "__main__":
-    clear_everything()
+    setup_building("1")

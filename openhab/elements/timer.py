@@ -7,23 +7,6 @@ import openhab.create_logger as logs
 log = logs.get_logger(filename="setup.log", name="timer")
 
 
-def post_thing_start_stop():
-    # create a MQTT binding that allows toggling the Active Switch and therefore starting and stopping the Timer Rule
-    with open(path_templates_folder/"things"/"start_stop.json") as f:
-        template_thing_start_stop = f.read()
-    uid = str(uuid.uuid4()).split("-")[0]
-    bridge_uid = get_from_config(key="bridge_uid")
-    bridge_uid_short = get_from_config(key="bridge_uid_short")
-    thing_uid = f"mqtt:topic:{bridge_uid_short}:{uid}"
-    template_thing_start_stop = template_thing_start_stop.replace(
-        "BRIDGE_UID", bridge_uid).replace(
-        "THING_UID", thing_uid)
-    thing_start_stop = json.loads(template_thing_start_stop)
-    save_to_config(key="thing_start_stop_uid", value=thing_uid)
-    rc = openhab_request(payload=thing_start_stop, endpoint="/things", method="POST")
-    log.info(f"Posted Thing Start Stop: {rc}")
-
-
 def post_rule_timer():
     # create a Timer Rule that triggers an action every given interval
     with open(path_templates_folder/"rules"/"rule_timer.json") as f:
@@ -43,7 +26,7 @@ def post_rule_timer():
 
 def post_item_active_switch():
     # create an Active Switch that enables or disables the Timer Rule
-    with open(path_templates_folder/"items"/"item_active_switch") as f:
+    with open(path_templates_folder/"items"/"item_active_switch.json") as f:
         item_active_switch = json.load(f)
     rc = openhab_request(payload=item_active_switch, endpoint="/items/Active_Switch", method="PUT")
     log.info(f"Posted Item Active Switch: {rc}")
@@ -63,7 +46,7 @@ def setup_timer():
     # set up the activation and Timer structure
 
     post_item_active_switch()
-    post_thing_start_stop()
+    #post_thing_start_stop()
     post_link_active_switch()
     post_rule_timer()
 
@@ -85,11 +68,6 @@ def clear_timer():
     # delete Item Active Switch
     rc = openhab_request(endpoint=f"/items/Active_Switch", method="DELETE")
     log.info(f"Deleted Item Active Switch: {rc}")
-
-    # delete Thing Start Stop
-    thing_start_stop_uid = get_from_config(key="thing_start_stop_uid")
-    rc = openhab_request(endpoint=f"/things/{thing_start_stop_uid}", method="DELETE")
-    log.info(f"Deleted Thing Start Stop: {rc}")
 
 
 if __name__ == "__main__":

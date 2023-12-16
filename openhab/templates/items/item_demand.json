@@ -1,0 +1,10 @@
+{
+  "type": "Number",
+  "name": "demand_BUILDING_ID",
+  "label": "Demand BUILDING_ID",
+  "category": "",
+  "tags": [],
+  "groupNames": [
+    "building_BUILDING_ID"
+  ]
+}

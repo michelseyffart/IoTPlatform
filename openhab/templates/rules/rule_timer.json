@@ -1,6 +1,6 @@
 {
   "uid": "RULE_TIMER_UID",
-  "name": "Timer",
+  "name": "Timer BUILDING_ID",
   "tags": [],
   "visibility": "VISIBLE",
   "status": {
@@ -11,7 +11,7 @@
   "triggers": [
     {
       "id": "1",
-      "label": "Every 5 seconds",
+      "label": "Cron Trigger",
       "configuration": {
         "cronExpression": "0/1 * * * *  *"
       },
@@ -23,7 +23,7 @@
       "inputs": {},
       "id": "3",
       "configuration": {
-        "itemName": "Active_Switch",
+        "itemName": "active_switch_BUILDING_ID",
         "state": "ON",
         "operator": "="
       },
@@ -35,7 +35,7 @@
       "inputs": {},
       "id": "2",
       "configuration": {
-        "type": "application/javascript",
+        "type": "application/javascript;version=ECMAScript-2021",
         "script": ""
       },
       "type": "script.ScriptAction"
