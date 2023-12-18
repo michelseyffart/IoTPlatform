@@ -4,6 +4,6 @@
   "name": "building_BUILDING_ID",
   "label": "Building BUILDING_ID",
   "category": "",
-  "tags": [],
+  "tags": ["building"],
   "groupNames": []
 }

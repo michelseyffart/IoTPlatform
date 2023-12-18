@@ -157,6 +157,12 @@ def post_links_building_values(building_id: str):
     rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
     log.info(f"Posted Link n_opt {building_id}: {rc}")
 
+    channel_uid = f"{thing_building_uid}:strategy_{building_id}"
+    item_name = f"strategy_{building_id}"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Strategy {building_id}: {rc}")
+
 
 def post_rule_bid(building_id: str):
     with open(path_templates_folder/"rules"/"rule_bid.json") as f:
@@ -196,6 +202,9 @@ def post_items_bid(building_id:str):
     rc = openhab_request(payload=metadata_string, endpoint=f"/items/buying_{building_id}/metadata/stateDescription",
                          method="PUT")
     log.info(f"Posted Metadata Buying {building_id}: {rc}")
+    rc = openhab_request(payload=metadata_string, endpoint=f"/items/strategy_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Strategy {building_id}: {rc}")
 
 
 def setup_building(building_id: str):
@@ -207,10 +216,11 @@ def setup_building(building_id: str):
     post_item_active_switch(building_id)
     post_link_active_switch(building_id)
     post_rule_timer(building_id)
-    post_thing_building_topic(building_id)
-    post_links_building_values(building_id)
     post_rule_bid(building_id)
     post_items_bid(building_id)
+    post_thing_building_topic(building_id)
+    post_links_building_values(building_id)
+
 
 
 def clear_building(building_id: str):
@@ -242,6 +252,9 @@ def clear_building(building_id: str):
     channel_uid = f"{thing_building_uid}:n_opt_{building_id}"
     rc = openhab_request(endpoint=f"/links/n_opt_{building_id}/{channel_uid}", method="DELETE")
     log.info(f"Deleted Links for n_opt {building_id}: {rc}")
+    channel_uid = f"{thing_building_uid}:strategy_{building_id}"
+    rc = openhab_request(endpoint=f"/links/strategy_{building_id}/{channel_uid}", method="DELETE")
+    log.info(f"Deleted Links for Strategy {building_id}: {rc}")
     rc = openhab_request(endpoint=f"/things/{thing_building_uid}", method="DELETE")
     log.info(f"Deleted Thing Building {building_id}: {rc}")
     rule_bid_uid = get_from_config(key=f"rule_bid_{building_id}_uid")
@@ -252,6 +265,8 @@ def clear_building(building_id: str):
     rc = openhab_request(endpoint=f"/items/price_{building_id}", method="DELETE")
     log.info(f"Deleted Item Quant {building_id}: {rc}")
     rc = openhab_request(endpoint=f"/items/buying_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Price {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/strategy_{building_id}", method="DELETE")
     log.info(f"Deleted Item Price {building_id}: {rc}")
 
 

@@ -14,8 +14,8 @@ initial_values = {
     "soc": 50
 }
 
-buildings = ["0", "1", "2", "3"]
-
+#buildings = ["0", "1", "2", "3"]
+buildings = ["0", "1"]
 
 def set_initial_values():
     for building in buildings:
@@ -44,13 +44,13 @@ def clear():
     log.info("Clearing complete")
 
 
-def setup_run_and_clear():
+def setup_run_and_clear(duration: int = 180):
     setup()
     time.sleep(1)
     set_initial_values()
     time.sleep(1)
     start_buildings()
-    time.sleep(10)
+    time.sleep(duration)
     stop_buildings()
     time.sleep(1)
     clear()
@@ -58,3 +58,4 @@ def setup_run_and_clear():
 
 if __name__ == "__main__":
     clear()
+    setup()

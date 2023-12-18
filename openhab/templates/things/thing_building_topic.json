@@ -35,6 +35,21 @@
       "configuration": {
         "stateTopic": "BUILDING_ID/n_opt"
       }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:strategy_BUILDING_ID",
+      "id": "strategy_BUILDING_ID",
+      "channelTypeUID": "mqtt:string",
+      "itemType": "String",
+      "kind": "STATE",
+      "label": "Strategy BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "BUILDING_ID/strategy"
+      }
     }
   ]
 }

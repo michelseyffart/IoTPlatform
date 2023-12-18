@@ -3,7 +3,7 @@
   "name": "demand_BUILDING_ID",
   "label": "Demand BUILDING_ID",
   "category": "",
-  "tags": [],
+  "tags": ["demand"],
   "groupNames": [
     "building_BUILDING_ID"
   ]

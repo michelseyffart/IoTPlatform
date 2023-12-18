@@ -3,7 +3,7 @@
   "name": "active_switch_BUILDING_ID",
   "label": "Active Switch BUILDING_ID",
   "category": "",
-  "tags": [],
+  "tags": ["active_switch"],
   "groupNames": [
     "building_BUILDING_ID"
   ]

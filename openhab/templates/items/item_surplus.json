@@ -3,7 +3,7 @@
   "name": "surplus_BUILDING_ID",
   "label": "Surplus BUILDING_ID",
   "category": "",
-  "tags": [],
+  "tags": ["surplus"],
   "groupNames": [
     "building_BUILDING_ID"
   ]

@@ -4,7 +4,7 @@
     "name": "buying_BUILDING_ID",
     "label": "Buying BUILDING_ID",
     "category": "",
-    "tags": [],
+    "tags": ["bid_buying"],
     "groupNames": [
       "building_BUILDING_ID"
   ]
@@ -14,7 +14,7 @@
     "name": "quant_BUILDING_ID",
     "label": "Quantity BUILDING_ID",
     "category": "",
-    "tags": [],
+    "tags": ["bid_quant"],
     "groupNames": [
       "building_BUILDING_ID"
   ]
@@ -24,7 +24,17 @@
     "name": "price_BUILDING_ID",
     "label": "Price BUILDING_ID",
     "category": "",
-    "tags": [],
+    "tags": ["bid_price"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+    {
+    "type": "String",
+    "name": "strategy_BUILDING_ID",
+    "label": "Strategy BUILDING_ID",
+    "category": "",
+    "tags": ["bid_strat"],
     "groupNames": [
       "building_BUILDING_ID"
   ]
