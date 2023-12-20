@@ -1,0 +1,6 @@
+{
+  "id": "Public_Info",
+  "type": "Public_Info",
+  "EquilibriumPrice": {"type": "Number"},
+  "EquilibriumQuantity": {"type": "Number"}
+}

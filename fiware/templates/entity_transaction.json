@@ -1,0 +1,7 @@
+{
+  "id": "Transaction:BUILDING_ID",
+  "type": "Transaction",
+  "TransactionQuantity": {"type": "Number"},
+  "TransactionPrice": {"type": "Number"},
+  "TransactionBuying": {"type": "Boolean"}
+}

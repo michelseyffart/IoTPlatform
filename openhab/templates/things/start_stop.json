@@ -22,6 +22,50 @@
         "off": "stop",
         "on": "start"
       }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:equilibrium_price",
+      "id": "equilibrium_price",
+      "channelTypeUID": "mqtt:string",
+      "kind": "STATE",
+      "label": "Equilibium Price",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "public_info",
+        "transformationPattern": "JSONPATH:$.equilibrium_price"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:equilibrium_quant",
+      "id": "equilibrium_quant",
+      "channelTypeUID": "mqtt:string",
+      "kind": "STATE",
+      "label": "Equilibium Quantity",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "public_info",
+        "transformationPattern": "JSONPATH:$.equilibrium_quantity"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:gateway",
+      "id": "gateway",
+      "channelTypeUID": "mqtt:switch",
+      "kind": "STATE",
+      "label": "Gateway",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "gateway"
+      }
     }
   ]
 }

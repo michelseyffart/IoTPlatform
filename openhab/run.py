@@ -1,4 +1,5 @@
 import logging
+import time
 
 import paho.mqtt.client as mqtt
 from setup import *
@@ -11,17 +12,21 @@ mqttc.connect("137.226.248.250")
 
 initial_values = {
     "n_opt": 0,
-    "soc": 50
+    "soc": 50,
+    "strategy": "bid"
 }
 
-#buildings = ["0", "1", "2", "3"]
-buildings = ["0", "1"]
+buildings = ["0", "1", "2", "3"]
+#buildings = ["0", "1"]
+
 
 def set_initial_values():
     for building in buildings:
         for key in initial_values.keys():
             mqttc.publish(topic=f"{building}/{key}", payload=f"{initial_values[key]}")
+    time.sleep(1)
     log.info("Set initial values")
+    return
 
 
 def start_buildings():
@@ -57,5 +62,4 @@ def setup_run_and_clear(duration: int = 180):
 
 
 if __name__ == "__main__":
-    clear()
-    setup()
+    set_initial_values()

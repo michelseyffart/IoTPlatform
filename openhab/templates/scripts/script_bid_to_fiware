@@ -1,0 +1,9 @@
+var buying = items.getItem("buying_BUILDING_ID").state
+var price = items.getItem("price_BUILDING_ID").state
+var quant = items.getItem("quant_BUILDING_ID").state
+var payload = {
+  bid_buying: buying,
+  bid_price: price,
+  bid_quantity: quant
+}
+actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("json/bid/BUILDING_ID/attrs", JSON.stringify(payload), false)

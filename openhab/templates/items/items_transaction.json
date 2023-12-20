@@ -1,0 +1,32 @@
+[
+  {
+    "type": "String",
+    "name": "trans_buying_BUILDING_ID",
+    "label": "Transaction Buying BUILDING_ID",
+    "category": "",
+    "tags": ["trans_buying"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "trans_quant_BUILDING_ID",
+    "label": "Transaction Quantity BUILDING_ID",
+    "category": "",
+    "tags": ["trans_quant"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "trans_price_BUILDING_ID",
+    "label": "Transaction Price BUILDING_ID",
+    "category": "",
+    "tags": ["trans_price"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  }
+]

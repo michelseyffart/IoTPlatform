@@ -1,0 +1,18 @@
+[
+  {
+    "type": "String",
+    "name": "equilibrium_price",
+    "label": "Equilibium Price",
+    "category": "",
+    "tags": ["equilibrium_price"],
+    "groupNames": []
+  },
+  {
+    "type": "String",
+    "name": "equilibrium_quant",
+    "label": "Equilibium Quantity",
+    "category": "",
+    "tags": ["equilibrium_quant"],
+    "groupNames": []
+  }
+]

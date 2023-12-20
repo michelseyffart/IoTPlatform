@@ -1,0 +1,10 @@
+{
+  "type": "Switch",
+  "name": "gateway_BUILDING_ID",
+  "label": "Gateway BUILDING_ID",
+  "category": "",
+  "tags": ["gateway"],
+  "groupNames": [
+    "building_BUILDING_ID"
+  ]
+}

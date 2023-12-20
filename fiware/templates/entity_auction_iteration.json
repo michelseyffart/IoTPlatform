@@ -1,0 +1,7 @@
+{
+  "id": "Auction_Iteration:BUILDING_ID",
+  "type": "Auction_Iteration",
+  "AuctionIterationQuantity": {"type": "Number"},
+  "AuctionIterationPrice": {"type": "Number"},
+  "AuctionIterationStep": {"type": "Number"}
+}

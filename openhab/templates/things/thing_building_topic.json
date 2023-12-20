@@ -50,6 +50,102 @@
       "configuration": {
         "stateTopic": "BUILDING_ID/strategy"
       }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:trans_buying_BUILDING_ID",
+      "id": "trans_buying_BUILDING_ID",
+      "channelTypeUID": "mqtt:string",
+      "itemType": "String",
+      "kind": "STATE",
+      "label": "Transaction Buying BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "transactions/Transaction:BUILDING_ID",
+        "transformationPattern": "JSONPATH:$.buying"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:trans_price_BUILDING_ID",
+      "id": "trans_price_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Transaction Price BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "transactions/Transaction:BUILDING_ID",
+        "transformationPattern": "JSONPATH:$.price"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:trans_quant_BUILDING_ID",
+      "id": "trans_quant_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Transaction Quantity BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "transactions/Transaction:BUILDING_ID",
+        "transformationPattern": "JSONPATH:$.quant"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:auction_iter_quant_BUILDING_ID",
+      "id": "auction_iter_quant_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Auction Iteration Quantity BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "auction_iterations/Auction_Iteration:BUILDING_ID",
+        "transformationPattern": "JSONPATH:$.quant"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:auction_iter_price_BUILDING_ID",
+      "id": "auction_iter_price_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Auction Iteration Price BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "auction_iterations/Auction_Iteration:BUILDING_ID",
+        "transformationPattern": "JSONPATH:$.price"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:auction_iter_step_BUILDING_ID",
+      "id": "auction_iter_step_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Auction Iteration Step BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "auction_iterations/Auction_Iteration:BUILDING_ID",
+        "transformationPattern": "JSONPATH:$.step"
+      }
     }
   ]
 }

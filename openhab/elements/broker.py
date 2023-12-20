@@ -37,10 +37,64 @@ def post_thing_start_stop():
     log.info(f"Posted Thing Start Stop: {rc}")
 
 
+def post_links_public_info():
+    thing_start_stop_uid = get_from_config(key=f"thing_start_stop_uid")
+
+    channel_uid = f"{thing_start_stop_uid}:equilibrium_price"
+    item_name = f"equilibrium_price"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Equilibrium Price: {rc}")
+
+    channel_uid = f"{thing_start_stop_uid}:equilibrium_quant"
+    item_name = f"equilibrium_quant"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Equilibrium Quantity: {rc}")
+
+
+def post_items_public_info():
+    with open(path_templates_folder/"items"/"items_public_info.json") as f:
+        items_public_info = json.load(f)
+    rc = openhab_request(payload=items_public_info, endpoint=f"/items/", method="PUT")
+    log.info(f"Posted Items Public Info: {rc}")
+
+    with open(path_templates_folder/"metadata"/"metadata_float.json") as f:
+        metadata_float = json.load(f)
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/equilibrium_price/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Equilibrium Price: {rc}")
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/equilibrium_quant/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Equilibrium Price: {rc}")
+
+
+def delete_items_public_info():
+    thing_start_stop_uid = get_from_config(key=f"thing_start_stop_uid")
+
+    channel_uid = f"{thing_start_stop_uid}:equilibrium_price"
+    item_name = f"equilibrium_price"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="DELETE")
+    log.info(f"Deleted Link Equilibrium Price: {rc}")
+
+    channel_uid = f"{thing_start_stop_uid}:equilibrium_quant"
+    item_name = f"equilibrium_quant"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="DELETE")
+    log.info(f"Deleted Link Equilibrium Quantity: {rc}")
+
+    rc = openhab_request(endpoint=f"/items/equilibrium_quant", method="DELETE")
+    log.info(f"Deleted Item Equilibrium Quantity: {rc}")
+    rc = openhab_request(endpoint=f"/items/equilibrium_price", method="DELETE")
+    log.info(f"Deleted Item Equilibrium Price: {rc}")
+
+
 def delete_broker():
     thing_broker_uid = get_from_config(key="bridge_uid")
     rc = openhab_request(endpoint=f"/things/{thing_broker_uid}", method="DELETE")
     log.info(f"Deleted Thing MQTT Broker: {rc}")
+    delete_items_public_info()
 
 
 def delete_thing_start_stop():
@@ -53,6 +107,8 @@ def delete_thing_start_stop():
 def setup_mqtt_structure():
     post_broker()
     post_thing_start_stop()
+    post_items_public_info()
+    post_links_public_info()
 
 
 def delete_mqtt_structure():

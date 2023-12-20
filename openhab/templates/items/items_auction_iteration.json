@@ -1,0 +1,32 @@
+[
+  {
+    "type": "Number",
+    "name": "auction_iter_step_BUILDING_ID",
+    "label": "Auction Iteration Step BUILDING_ID",
+    "category": "",
+    "tags": ["auction_iter_step"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "auction_iter_quant_BUILDING_ID",
+    "label": "Auction Iteration Quantity BUILDING_ID",
+    "category": "",
+    "tags": ["auction_iter_quant"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "auction_iter_price_BUILDING_ID",
+    "label": "Auction Iteration Price BUILDING_ID",
+    "category": "",
+    "tags": ["auction_iter_price"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  }
+]
