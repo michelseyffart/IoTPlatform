@@ -85,6 +85,9 @@ def post_item_active_switch(building_id: str):
     rc = openhab_request(payload=metadata_string,
                          endpoint=f"/items/active_switch_{building_id}/metadata/stateDescription", method="PUT")
     log.info(f"Posted Metadata Active Switch {building_id}: {rc}")
+    rc = openhab_request(payload="OFF",
+                         endpoint=f"/items/active_switch_{building_id}/state", method="PUT", content_type="text/plain")
+    log.info(f"Posted State OFF Active Switch {building_id}: {rc}")
 
 
 def post_link_active_switch(building_id: str):
@@ -449,7 +452,9 @@ def clear_building(building_id: str):
     log.info(f"Deleted Item Trans Price {building_id}: {rc}")
     rc = openhab_request(endpoint=f"/items/auction_iter_step_{building_id}", method="DELETE")
     log.info(f"Deleted Item Trans Buying {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/gateway_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Gateway {building_id}: {rc}")
 
 
 if __name__ == "__main__":
-    post_items_auction_iteration("0")
+    print()

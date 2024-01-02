@@ -17,8 +17,8 @@ FIWARE_HEADER = FiwareHeader(service="iotplatform", service_path="/")
 s = Session()
 cbc = ContextBrokerClient(url=CB_URL, fiware_header=FIWARE_HEADER, session=s)
 
-step_length = 10
-auction_time = 7
+step_length = 5
+auction_time = 4
 
 
 def collect_bids():

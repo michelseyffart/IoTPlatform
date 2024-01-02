@@ -4,6 +4,7 @@ import time
 import paho.mqtt.client as mqtt
 from setup import *
 import openhab.create_logger as logs
+from coordinator.coordinator import coordinator_loop
 
 log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
@@ -16,7 +17,7 @@ initial_values = {
     "strategy": "bid"
 }
 
-buildings = ["0", "1", "2", "3"]
+buildings = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"]
 #buildings = ["0", "1"]
 
 
@@ -51,15 +52,16 @@ def clear():
 
 def setup_run_and_clear(duration: int = 180):
     setup()
-    time.sleep(1)
+    time.sleep(5)
     set_initial_values()
-    time.sleep(1)
+    time.sleep(5)
     start_buildings()
+    coordinator_loop()
     time.sleep(duration)
     stop_buildings()
-    time.sleep(1)
+    time.sleep(2)
     clear()
 
 
 if __name__ == "__main__":
-    set_initial_values()
+    setup_run_and_clear(duration=30)

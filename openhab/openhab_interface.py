@@ -13,13 +13,13 @@ with open(path_token) as f:
     token = f.read()
 
 
-def openhab_request(endpoint: str, method, payload: dict = None):
-    if payload:
+def openhab_request(endpoint: str, method, payload: dict | str = None, content_type: str = 'application/json'):
+    if payload and not isinstance(payload, str):
         payload = json.dumps(payload)
     _url = url + endpoint
     headers = {
         'Accept-Language': '<string>',
-        'Content-Type': 'application/json',
+        'Content-Type': content_type,
         'Accept': '*/*',
         'Authorization': f'Bearer {token}'
     }

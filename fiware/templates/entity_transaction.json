@@ -1,7 +1,28 @@
 {
   "id": "Transaction:BUILDING_ID",
   "type": "Transaction",
-  "TransactionQuantity": {"type": "Number"},
-  "TransactionPrice": {"type": "Number"},
-  "TransactionBuying": {"type": "Boolean"}
+  "TransactionQuantity": {
+    "type": "Number",
+    "metadata": {
+      "TimeInstant": {
+        "type": "DateTime"
+      }
+    }
+  },
+  "TransactionPrice": {
+    "type": "Number",
+    "metadata": {
+      "TimeInstant": {
+        "type": "DateTime"
+      }
+    }
+  },
+  "TransactionBuying": {
+    "type": "Boolean",
+    "metadata": {
+      "TimeInstant": {
+        "type": "DateTime"
+      }
+    }
+  }
 }
