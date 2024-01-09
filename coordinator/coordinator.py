@@ -5,7 +5,7 @@ import requests.exceptions
 from filip.clients.ngsi_v2.cb import ContextBrokerClient, FiwareHeader, ContextEntity
 from filip.clients.ngsi_v2.iota import IoTAClient, ServiceGroup
 from requests import Session
-from auctions import dummy, iterating_auction
+from coordinator.auctions import dummy, iterating_auction
 from fiware.config.paths import path_fiware_templates_folder
 from fiware.setup import post_entity_transaction, post_entity_auction_iteration, post_entity_public_info
 import datetime
@@ -101,8 +101,9 @@ def whole_iter_auction():
     print("Ran auction")
 
 
-def coordinator_loop():
-    while True:
+def coordinator_loop(duration: int = 180):
+    stop_time = datetime.datetime.now() + datetime.timedelta(seconds=duration)
+    while datetime.datetime.now() < stop_time:
         seconds = int(datetime.datetime.now().strftime("%S"))
         if (seconds - auction_time) % step_length == 0:
             whole_single_auction()
