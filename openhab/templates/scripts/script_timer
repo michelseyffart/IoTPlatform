@@ -13,4 +13,4 @@ items.getItem("demand_BUILDING_ID").postUpdate(dem);
 items.getItem("surplus_BUILDING_ID").postUpdate(sur);
 items.getItem("soc_BUILDING_ID").postUpdate(soc);
 items.getItem("n_opt_BUILDING_ID").postUpdate(String(n_opt));
-console.log(res);
+console.log("BUILDING_ID: ran opti")

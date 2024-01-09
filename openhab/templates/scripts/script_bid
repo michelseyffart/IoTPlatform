@@ -5,7 +5,7 @@ sur = items.getItem("surplus_BUILDING_ID").state
 dem = String(dem)
 sur = String(sur)
 var strat = items.getItem("strategy_BUILDING_ID").state
-var script = String("/openhab/pyscripts/scripts/" + strat + ".py")
+var script = String("/openhab/pyscripts/scripts/bidding/" + strat + ".py")
 var bid = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "python3", script, dem, sur)
 buying = bid.split("buying:")[1].split(",")[0]
 quant = bid.split("quant:")[1].split(",")[0]
@@ -13,10 +13,8 @@ quant = parseFloat(quant)
 price = bid.split("price:")[1].split(",")[0]
 price = parseFloat(price)
 
-console.log("buying_bool: ", buying)
-console.log("quant: ", quant)
-console.log("price: ", price)
-
 items.getItem("buying_BUILDING_ID").postUpdate(buying)
 items.getItem("quant_BUILDING_ID").postUpdate(quant)
 items.getItem("price_BUILDING_ID").postUpdate(price)
+
+console.log("BUILDING_ID: created bid")

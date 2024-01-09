@@ -7,3 +7,4 @@ var payload = {
   bid_quantity: quant
 }
 actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("json/bid/BUILDING_ID/attrs", JSON.stringify(payload), false)
+console.log("BUILDING_ID: sent bid to FIWARE")
