@@ -2,3 +2,4 @@
 /openhab/token
 /openhab/logs
 /openhab/config/config.json
+/data_collection/rawdata
