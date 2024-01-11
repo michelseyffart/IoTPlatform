@@ -11,10 +11,10 @@ from requests import Session
 #cbc = ContextBrokerClient(url=CB_URL, fiware_header=FIWARE_HEADER, session=s)
 
 
-def post_entity_transaction(building: str, cbc: ContextBrokerClient):
+def post_entity_transaction(building: int, cbc: ContextBrokerClient):
     with open(path_fiware_templates_folder / "entity_transaction.json") as f:
         entity_transaction_template = f.read()
-    entity_transaction = entity_transaction_template.replace("BUILDING_ID", building)
+    entity_transaction = entity_transaction_template.replace("BUILDING_ID", str(building))
     entity_transaction = json.loads(entity_transaction)
     entity = ContextEntity(**entity_transaction)
     cbc.post_entity(entity=entity, update=True)

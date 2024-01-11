@@ -1,4 +1,5 @@
 {
   "time_for_step": 5,
-  "range_for_random_start": 0
+  "range_for_random_start": 0,
+  "auction_time": 4
 }
