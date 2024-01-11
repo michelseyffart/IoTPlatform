@@ -6,6 +6,7 @@ import logs.create_logger as logs
 import market.coordinator as coordinator
 import datetime
 import openhab.config.config as config
+import data_collection.collector as collector
 
 log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
@@ -55,11 +56,11 @@ def clear():
     log.info("Clearing complete")
 
 
-def setup_run_and_clear(duration: int = 180):
-    setup()
-    time.sleep(5)
-    set_initial_values()
+def run_simulation(duration: int = 180):
     c = coordinator.Coordinator()
+    data_collector = collector.Collector()
+    data_collector.start()
+    log.info("Waiting to start")
     time.sleep(len(buildings))
     start_at_second = config.get_from_params("time_for_step")
     while not int(datetime.datetime.now().strftime("%S")) % 10 == start_at_second - 1:
@@ -69,9 +70,16 @@ def setup_run_and_clear(duration: int = 180):
     c.coordinator_loop(duration=duration)
     stop_buildings()
     time.sleep(2)
+    data_collector.stop()
+
+
+def setup_run_and_clear(duration: int = 180):
+    setup()
+    time.sleep(5)
+    set_initial_values()
+    run_simulation(duration=duration)
     clear()
 
 
 if __name__ == "__main__":
-    setup_run_and_clear(duration=60)
-    #clear()
+    run_simulation(duration=30)
