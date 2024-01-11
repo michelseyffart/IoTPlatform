@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.10 (IoTPlatform)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (IoTPlatform)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="IoTPlatform" project-jdk-type="Python SDK" />
 </project>

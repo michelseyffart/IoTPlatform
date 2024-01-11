@@ -1,4 +1,5 @@
 from market.transaction import TransactionInfo
+from market.public_info import PublicInfo
 
 
 class MarketBook:
@@ -9,6 +10,8 @@ class MarketBook:
         self.selling_bids = list()
         self.transactions = list()
         self.transaction_info = dict()
+        self.auction_iterations = list()
+        self.public_info = PublicInfo()
 
     def add_bids(self, bids: list):
         for bid in bids:

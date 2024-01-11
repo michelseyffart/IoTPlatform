@@ -1,5 +1,4 @@
 import logging
-import time
 
 import paho.mqtt.client as mqtt
 from setup import *

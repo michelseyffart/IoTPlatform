@@ -20,10 +20,10 @@ def post_entity_transaction(building: int, cbc: ContextBrokerClient):
     cbc.post_entity(entity=entity, update=True)
 
 
-def post_entity_auction_iteration(building: str, cbc: ContextBrokerClient):
+def post_entity_auction_iteration(building: int, cbc: ContextBrokerClient):
     with open(path_fiware_templates_folder / "entity_auction_iteration.json") as f:
         entity_auction_iteration_template = f.read()
-    entity_auction_iteration = entity_auction_iteration_template.replace("BUILDING_ID", building)
+    entity_auction_iteration = entity_auction_iteration_template.replace("BUILDING_ID", str(building))
     entity_auction_iteration = json.loads(entity_auction_iteration)
     entity = ContextEntity(**entity_auction_iteration)
     cbc.post_entity(entity=entity, update=True)

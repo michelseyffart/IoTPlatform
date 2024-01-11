@@ -22,5 +22,4 @@ def clear_devices():
 
 
 if __name__ == "__main__":
-    clear_entities(type="Bid")
-    clear_devices()
+    clear_entities(type="Transaction")
