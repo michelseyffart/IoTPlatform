@@ -1,9 +1,7 @@
 import requests
-import json
 import logging
-from openhab.config.paths import path_token
 from openhab.config.config import *
-import openhab.create_logger as logs
+import logs.create_logger as logs
 
 log = logs.get_logger(filename="http.log", name="http", consolelevel=logging.WARNING)
 

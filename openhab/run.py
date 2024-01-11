@@ -2,7 +2,7 @@ import logging
 
 import paho.mqtt.client as mqtt
 from setup import *
-import openhab.create_logger as logs
+import logs.create_logger as logs
 import market.coordinator as coordinator
 import datetime
 import openhab.config.config as config

@@ -1,12 +1,12 @@
-from filip.clients.ngsi_v2.cb import ContextBrokerClient, FiwareHeader, ContextEntity
-from market.transaction import Transaction, TransactionInfo
+from filip.clients.ngsi_v2.cb import ContextBrokerClient, FiwareHeader
+from market.transaction import TransactionInfo
 from market.bid import Bid
 from market.auction_iteration import AuctionIteration
 from market.public_info import PublicInfo
 import fiware.setup as setup
 from requests import Session
 import requests.exceptions
-import openhab.create_logger as logs
+import logs.create_logger as logs
 import logging
 
 

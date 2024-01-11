@@ -5,17 +5,22 @@ import market.market_book as market_book
 from market.bid import Bid
 import openhab.config.config as config
 from fiware.fiware_interface import FiwareInterface
+import logs.create_logger as logs
+import logging
 
 
 class Coordinator:
 
     def __init__(self):
 
+        self.log = logs.get_logger(filename="run.log", name="coordinator", consolelevel=logging.INFO)
+
         self.fiware = FiwareInterface()
         self.book = market_book.MarketBook()
 
         self.step_length = config.get_from_params("time_for_step")
         self.auction_time = config.get_from_params("auction_time")
+        self.log.info("Created coordinator")
 
     def collect_bids(self):
         bid_entities = self.fiware.get_bid_entities()
@@ -39,7 +44,7 @@ class Coordinator:
         self.fiware.update_public_info(self.book.public_info)
 
     def whole_single_auction(self):
-        print("Running auction")
+        self.log.info("Running auction")
         bids = self.collect_bids()
         self.book.add_bids(bids=bids)
         self.book.separate_bids()
@@ -51,7 +56,7 @@ class Coordinator:
         self.publish_transaction_info()
         self.reset_all_recorded_bids()
         self.book.clear_book()
-        print("Ran auction")
+        self.log.info("Auction complete")
 
     def whole_iter_auction(self):
         print("Running auction")
@@ -61,6 +66,7 @@ class Coordinator:
         print("Ran auction")
 
     def coordinator_loop(self, duration: int = 180):
+        self.log.info("Starting coordinator")
         stop_time = datetime.datetime.now() + datetime.timedelta(seconds=duration)
         while datetime.datetime.now() < stop_time:
             seconds = int(datetime.datetime.now().strftime("%S"))

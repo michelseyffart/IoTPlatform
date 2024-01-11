@@ -1,7 +1,6 @@
 import json
-import openhab.create_logger as logs
+import logs.create_logger as logs
 from openhab.config.paths import *
-from pathlib import Path
 
 path_config_file = path_config_folder.joinpath("config.json")
 path_params_file = path_config_folder.joinpath("params.json")

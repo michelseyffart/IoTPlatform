@@ -1,6 +1,6 @@
 from openhab.openhab_interface import openhab_request
 from openhab.config.config import *
-import openhab.create_logger as logs
+import logs.create_logger as logs
 
 log = logs.get_logger(filename="setup.log", name="addons")
 
