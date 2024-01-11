@@ -1,5 +1,6 @@
 /openhab/unused
 /openhab/token
-/openhab/logs
+/logs
+!logs/create_logger.py
 /openhab/config/config.json
 /data_collection/rawdata
