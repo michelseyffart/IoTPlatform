@@ -1,5 +1,5 @@
-var dem = parseInt(items.getItem("demand_BUILDING_ID").state);
-var sur = parseInt(items.getItem("surplus_BUILDING_ID").state);
+var dem = parseFloat(items.getItem("demand_BUILDING_ID").state);
+var sur = parseFloat(items.getItem("surplus_BUILDING_ID").state);
 var n_opt = parseInt(items.getItem("n_opt_BUILDING_ID").state);
 
 var trans_quant = parseFloat(items.getItem("trans_quant_BUILDING_ID").state);
