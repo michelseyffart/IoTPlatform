@@ -1,0 +1,22 @@
+[
+  {
+    "type": "Number",
+    "name": "to_grid_BUILDING_ID",
+    "label": "To grid BUILDING_ID",
+    "category": "",
+    "tags": ["to_grid"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "from_grid_BUILDING_ID",
+    "label": "From grid BUILDING_ID",
+    "category": "",
+    "tags": ["from_grid"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  }
+]

@@ -1,14 +1,21 @@
-var n_opt;
-var soc;
-n_opt = parseInt(items.getItem("n_opt_BUILDING_ID").state);
-n_opt = String(n_opt)
+var n_opt = parseInt(items.getItem("n_opt_BUILDING_ID").state);
+var n_opt = String(n_opt)
 soc = items.getItem("soc_BUILDING_ID").state;
 soc = String(soc)
 var res = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "python3", "/openhab/pyscripts/scripts/opti.py", n_opt, soc, "BUILDING_ID");
-actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("data/opti/BUILDING_ID", n_opt + res, false)
+
 dem = parseFloat(res.split("demand:")[1].split(",")[0]);
 sur = parseFloat(res.split("surplus:")[1].split(",")[0]);
 soc = parseFloat(res.split("soc:")[1]);
+
+payload = {
+  "n_opt": n_opt,
+  "dem": dem,
+  "sur": sur,
+  "soc": soc
+}
+actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("data/opti/BUILDING_ID", JSON.stringify(payload), false)
+
 n_opt = parseInt(n_opt) + 1
 items.getItem("demand_BUILDING_ID").postUpdate(dem);
 items.getItem("surplus_BUILDING_ID").postUpdate(sur);

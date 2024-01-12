@@ -104,8 +104,10 @@ def post_rule_timer(building_id: str):
     # create a Timer Rule that triggers an action every given interval
     with open(path_templates_folder/"rules"/"rule_timer.json") as f:
         template_rule_timer = f.read()
-    with open(path_templates_folder/"scripts"/"script_timer") as f:
-        script_timer_template = f.read()
+    with open(path_templates_folder / "scripts" / "script_grid") as f:
+        script_grid_template = f.read()
+    with open(path_templates_folder/"scripts"/"script_opti") as f:
+        script_opti_template = f.read()
     rule_timer_uid = str(uuid.uuid4()).split("-")[0]
     param_time_for_step = get_from_params("time_for_step")
     param_random_start = get_from_params("range_for_random_start")
@@ -116,11 +118,15 @@ def post_rule_timer(building_id: str):
         "RANDOM_START", str(random_start)).replace(
         "LENGTH", str(param_time_for_step))
     bridge_uid = get_from_config(key="bridge_uid")
-    script_timer = script_timer_template.replace(
+    script_opti = script_opti_template.replace(
+        "BRIDGE_UID", bridge_uid).replace(
+        "BUILDING_ID", building_id)
+    script_grid = script_grid_template.replace(
         "BRIDGE_UID", bridge_uid).replace(
         "BUILDING_ID", building_id)
     rule_timer = json.loads(template_rule_timer)
-    rule_timer["actions"][0]["configuration"]["script"] = script_timer
+    rule_timer["actions"][0]["configuration"]["script"] = script_grid
+    rule_timer["actions"][1]["configuration"]["script"] = script_opti
     save_to_config(key=f"rule_timer_{building_id}_uid", value=rule_timer_uid)
     rc = openhab_request(payload=rule_timer, endpoint="/rules", method="POST")
     log.info(f"Posted Rule Timer {building_id}: {rc}")
@@ -209,6 +215,24 @@ def post_items_bid(building_id:str):
                          method="PUT")
     log.info(f"Posted Metadata Strategy {building_id}: {rc}")
 
+
+def post_items_grid(building_id:str):
+    with open(path_templates_folder/"items"/"items_grid.json") as f:
+        items_grid_template = f.read()
+    items_grid_template = items_grid_template.replace("BUILDING_ID", building_id)
+    items_grid = json.loads(items_grid_template)
+    rc = openhab_request(payload=items_grid, endpoint=f"/items/", method="PUT")
+    log.info(f"Posted Items Grid {building_id}: {rc}")
+    with open(path_templates_folder/"metadata"/"metadata_float.json") as f:
+        metadata_float = json.load(f)
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/to_grid_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata To Grid {building_id}: {rc}")
+    with open(path_templates_folder/"metadata"/"metadata_float.json") as f:
+        metadata_float = json.load(f)
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/from_grid_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata From Grid {building_id}: {rc}")
 
 def post_items_transaction(building_id:str):
     with open(path_templates_folder/"items"/"items_transaction.json") as f:
@@ -356,6 +380,7 @@ def setup_building(building_id: str):
     post_items_bid(building_id)
     post_items_transaction(building_id)
     post_items_auction_iteration(building_id)
+    post_items_grid(building_id)
     post_item_gateway(building_id)
     post_thing_building_topic(building_id)
     post_links_building_values(building_id)
@@ -455,6 +480,11 @@ def clear_building(building_id: str):
     rc = openhab_request(endpoint=f"/items/gateway_{building_id}", method="DELETE")
     log.info(f"Deleted Item Gateway {building_id}: {rc}")
 
+    rc = openhab_request(endpoint=f"/items/from_grid_{building_id}", method="DELETE")
+    log.info(f"Deleted Item From grid {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/to_grid_{building_id}", method="DELETE")
+    log.info(f"Deleted Item To grid {building_id}: {rc}")
+
 
 if __name__ == "__main__":
-    print()
+    post_items_grid("0")
