@@ -1,5 +1,6 @@
 {
-  "time_for_step": 5,
-  "range_for_random_start": 0,
-  "auction_time": 4
+  "time_for_step": 10,
+  "range_for_random_start": 10,
+  "auction_time": 4,
+  "bid_expiration_time": 8
 }

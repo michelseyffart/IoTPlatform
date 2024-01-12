@@ -1,12 +1,13 @@
 import logging
 
 import paho.mqtt.client as mqtt
-from setup import *
+from openhab.setup import *
 import logs.create_logger as logs
 import market.coordinator as coordinator
 import datetime
 import openhab.config.config as config
 import data_collection.collector as collector
+import time
 
 log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
@@ -56,9 +57,9 @@ def clear():
     log.info("Clearing complete")
 
 
-def run_simulation(duration: int = 180):
+def run_simulation(clearing_mechanism: str, duration: int = 180):
     c = coordinator.Coordinator()
-    data_collector = collector.Collector()
+    data_collector = collector.MQTTCollector()
     data_collector.start()
     log.info("Waiting to start")
     time.sleep(len(buildings))
@@ -67,19 +68,21 @@ def run_simulation(duration: int = 180):
         time.sleep(0.1)
     start_buildings()
     time.sleep(1)
-    c.coordinator_loop(duration=duration)
+    c.coordinator_loop(duration=duration, clearing_mechanism=clearing_mechanism)
     stop_buildings()
     time.sleep(2)
     data_collector.stop()
 
 
-def setup_run_and_clear(duration: int = 180):
+def setup_run_and_clear(clearing_mechanism: str, duration: int = 180):
     setup()
     time.sleep(5)
     set_initial_values()
-    run_simulation(duration=duration)
+    run_simulation(duration=duration, clearing_mechanism=clearing_mechanism)
     clear()
 
 
 if __name__ == "__main__":
-    run_simulation(duration=30)
+    run_simulation(duration=60, clearing_mechanism="c")
+    #setup()
+    #set_initial_values()

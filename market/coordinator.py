@@ -20,6 +20,8 @@ class Coordinator:
 
         self.step_length = config.get_from_params("time_for_step")
         self.auction_time = config.get_from_params("auction_time")
+        self.bid_expiration_time = config.get_from_params("bid_expiration_time")
+
         self.log.info("Created coordinator")
 
     def collect_bids(self):
@@ -43,8 +45,20 @@ class Coordinator:
     def post_public_info(self):
         self.fiware.update_public_info(self.book.public_info)
 
+    def reset_and_delete_expired_bids(self):
+        expiration_time = datetime.datetime.now() - datetime.timedelta(seconds=self.bid_expiration_time)
+        expired_bids = [bid for bid in self.book.all_bids if bid.datetime <= expiration_time]
+        for bid in expired_bids:
+            self.fiware.reset_bid(bid=bid)
+            self.book.delete_bid(bid=bid)
+
+    def update_bids(self):
+        for bid in self.book.all_bids:
+            if bid.part_of_transaction:
+                self.fiware.update_bid_quantity(bid=bid)
+
     def whole_single_auction(self):
-        self.log.info("Running auction")
+        self.log.info("Running discrete auction")
         bids = self.collect_bids()
         self.book.add_bids(bids=bids)
         self.book.separate_bids()
@@ -58,24 +72,46 @@ class Coordinator:
         self.book.clear_book()
         self.log.info("Auction complete")
 
+    def whole_continuous_auction(self):
+        self.log.info("Running continuous auction")
+        bids = self.collect_bids()
+        self.book.add_bids(bids=bids)
+        self.reset_and_delete_expired_bids()
+        self.book.separate_bids()
+        self.book.sort_bids()
+        transactions = single_round_auction.run_auction(selling_bids=self.book.selling_bids,
+                                                        buying_bids=self.book.buying_bids)
+        self.book.add_transactions(transactions)
+        self.book.aggregate_transaction_info()
+        self.update_bids()
+        self.publish_transaction_info()
+        self.book.clear_book()
+        self.log.info("Auction complete")
+
     def whole_iter_auction(self):
         print("Running auction")
         bids = self.collect_bids()
-        auction_iter = iterating_auction.run_auction(bids)
-        self.post_auction_iteration(auc_iter=auction_iter)
+        auction_iter = iterating_auction.run_auction(bids=bids)
+        self.post_auction_iteration()
         print("Ran auction")
 
-    def coordinator_loop(self, duration: int = 180):
+    def coordinator_loop(self, clearing_mechanism: str, duration: int = 180):
         self.log.info("Starting coordinator")
         stop_time = datetime.datetime.now() + datetime.timedelta(seconds=duration)
-        while datetime.datetime.now() < stop_time:
-            seconds = int(datetime.datetime.now().strftime("%S"))
-            if (seconds - self.auction_time) % self.step_length == 0:
-                self.whole_single_auction()
-                time.sleep(1)
-            time.sleep(0.1)
+        if clearing_mechanism in ["discrete", "d"]:
+            while datetime.datetime.now() < stop_time:
+                seconds = int(datetime.datetime.now().strftime("%S"))
+                if (seconds - self.auction_time) % self.step_length == 0:
+                    self.whole_single_auction()
+                    time.sleep(1)
+                time.sleep(0.1)
+        elif clearing_mechanism in ["continuous", "c"]:
+            while datetime.datetime.now() < stop_time:
+                self.whole_continuous_auction()
 
 
 if __name__ == "__main__":
     c = Coordinator()
-    c.whole_single_auction()
+    c.coordinator_loop(duration=30, clearing_mechanism="continuous")
+    #c.whole_continuous_auction()
+

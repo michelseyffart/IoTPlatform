@@ -69,9 +69,11 @@ class FiwareInterface:
 
     def update_public_info(self, public_info: PublicInfo, failed_previously: bool = False):
         try:
-            self.cbc.update_attribute_value(entity_id="Public_Info", attr_name="EquilibriumPrice",
+            self.cbc.update_attribute_value(entity_id="Public_Info",
+                                            attr_name="EquilibriumPrice",
                                             value=public_info.equilibrium_price)
-            self.cbc.update_attribute_value(entity_id="Public_Info", attr_name="EquilibriumQuantity",
+            self.cbc.update_attribute_value(entity_id="Public_Info",
+                                            attr_name="EquilibriumQuantity",
                                             value=public_info.equilibrium_quantity)
         except requests.exceptions.HTTPError as e:
             if not failed_previously:
@@ -79,3 +81,8 @@ class FiwareInterface:
                 self.update_public_info(public_info=public_info, failed_previously=True)
             else:
                 self.log.error(f"Could not post public info. {e}")
+
+    def update_bid_quantity(self, bid: Bid):
+        self.cbc.update_attribute_value(entity_id=f"Bid:{bid.id}",
+                                        attr_name="BidQuantity",
+                                        value=bid.quantity)
