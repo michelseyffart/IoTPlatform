@@ -1,8 +1,8 @@
 import time
 
-from elements.building import setup_building, clear_building
-from elements.addons import install_all_addons
-from elements.broker import setup_mqtt_structure, delete_mqtt_structure
+from openhab.elements.building import setup_building, clear_building
+from openhab.elements.addons import install_all_addons
+from openhab.elements.broker import setup_mqtt_structure, delete_mqtt_structure
 
 
 def clear_everything(buildings: list):
