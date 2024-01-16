@@ -584,4 +584,4 @@ def clear_building(building_id: str):
 
 
 if __name__ == "__main__":
-    post_items_grid("0")
+    print()

@@ -56,7 +56,7 @@ def setup():
 
 def clear():
     log.info("Clearing openHAB")
-    clear_everything(buildings=buildings)
+    hard_clear()
     log.info("Clearing complete")
 
 
@@ -86,6 +86,8 @@ def setup_run_and_clear(clearing_mechanism: str, duration: int = 180):
 
 
 if __name__ == "__main__":
-    run_simulation(duration=60, clearing_mechanism="c")
-    #setup()
-    #set_initial_values()
+    clear()
+    setup()
+    set_initial_values()
+    run_simulation(duration=60, clearing_mechanism="d")
+    #clear()
