@@ -1,4 +1,4 @@
-var buying = (items.getItem("buying_BUILDING_ID").state == "True")
+var buying = (items.getItem("buying_BUILDING_ID").state == "true")
 var price = items.getItem("price_BUILDING_ID").state
 var quant = items.getItem("quant_BUILDING_ID").state
 var time = Date.now()

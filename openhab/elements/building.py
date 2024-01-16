@@ -405,6 +405,46 @@ def post_link_gateway(building_id: str):
     log.info(f"Posted Link Gateway: {rc}")
 
 
+def post_items_learning_bid(building_id: str):
+    with open(path_templates_folder / "items" / "item_group_learning_bid.json") as f:
+        item_group_learning_bid_template = f.read()
+    item_group_learning_bid_template = item_group_learning_bid_template.replace("BUILDING_ID", building_id)
+    item_group_learning_bid = json.loads(item_group_learning_bid_template)
+    rc = openhab_request(payload=item_group_learning_bid, endpoint=f"/items/learning_bid_{building_id}",
+                         method="PUT")
+    log.info(f"Posted Item Group Learning Bid {building_id}: {rc}")
+
+    thing_building_uid = get_from_config(key=f"thing_building_{building_id}_uid")
+    min_price = get_from_params("learning_bid/min_price")
+    max_price = get_from_params("learning_bid/max_price")
+    step_width = get_from_params("learning_bid/step_width")
+    for price in range(min_price, max_price+step_width, step_width):
+        price = str(price)
+        for bid_type in ["buying", "selling"]:
+            with open(path_templates_folder / "items" / "item_learning_bid_prop.json") as f:
+                item_learning_bid_prop_template = f.read()
+            item_learning_bid_prop_template = item_learning_bid_prop_template.replace(
+                "BUILDING_ID", building_id).replace(
+                "PRICE", price).replace(
+                "BUYING/SELLING", bid_type)
+            item_learning_bid_prop = json.loads(item_learning_bid_prop_template)
+            rc = openhab_request(payload=item_learning_bid_prop,
+                                 endpoint=f"/items/{bid_type}_prop_{price}_{building_id}",
+                                 method="PUT")
+            log.info(f"Posted Item {bid_type} prop {price} {building_id}: {rc}")
+            with open(path_templates_folder / "metadata" / "metadata_float.json") as f:
+                metadata_float = json.load(f)
+            rc = openhab_request(payload=metadata_float,
+                                 endpoint=f"/items/{bid_type}_prop_{price}_{building_id}/metadata/stateDescription",
+                                 method="PUT")
+            log.info(f"Posted Metadata {bid_type} prop {price} {building_id}: {rc}")
+            channel_uid = f"{thing_building_uid}:learning_bid_prop_{building_id}"
+            item_name = f"{bid_type}_prop_{price}_{building_id}"
+            payload = {"itemName": item_name, "channelUID": channel_uid}
+            rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+            log.info(f"Posted Link {bid_type} Prop {price} {building_id}: {rc}")
+
+
 def setup_building(building_id: str):
     post_group(building_id)
     post_item_demand(building_id)
@@ -428,6 +468,7 @@ def setup_building(building_id: str):
     post_links_auction_iteration(building_id)
     post_items_auction_iteration(building_id)
     post_link_gateway(building_id)
+    post_items_learning_bid(building_id)
 
 
 def clear_building(building_id: str):

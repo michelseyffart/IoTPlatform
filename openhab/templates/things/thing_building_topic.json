@@ -176,6 +176,21 @@
       "configuration": {
         "stateTopic": "BUILDING_ID/total_trans_quant"
       }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:learning_bid_prop_BUILDING_ID",
+      "id": "learning_bid_prop_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Learning Bid Prop BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "BUILDING_ID/learning_bid_prop"
+      }
     }
   ]
 }

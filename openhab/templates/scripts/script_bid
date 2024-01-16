@@ -1,20 +1,51 @@
-var dem
-var sur
-dem = items.getItem("demand_BUILDING_ID").state
-sur = items.getItem("surplus_BUILDING_ID").state
-dem = String(dem)
-sur = String(sur)
-var strat = items.getItem("strategy_BUILDING_ID").state
-var script = String("/openhab/pyscripts/scripts/bidding/" + strat + ".py")
-var bid = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "python3", script, dem, sur)
-buying = bid.split("buying:")[1].split(",")[0]
-quant = bid.split("quant:")[1].split(",")[0]
-quant = parseFloat(quant)
-price = bid.split("price:")[1].split(",")[0]
-price = parseFloat(price)
+function learningBid() {
+  
+  var props = [];
+  var total_prop = 0;
+  
+  var propItems = buying ? items.getItemsByTag("buying_prop_BUILDING_ID") : items.getItemsByTag("selling_prop_BUILDING_ID");
+  
+  for (var propItem of propItems) {
+    var price = propItem.name.split("_prop_")[1].split("_BUILDING_ID")[0];
+    var prop_value = parseFloat(propItem.state);
+    var prop = [price, prop_value];
+    total_prop += prop_value;
+    props.push(prop);
+   };
+  
+  var randomNum = Math.random() * total_prop;
+  var cumulativeProp = 0;
+  
+  for (var i = 0; i < props.length; i++) {
+    cumulativeProp += props[i][1];
+    if (randomNum <= cumulativeProp) {
+      return (props[i][0] / 100);
+    }
+  }
+}
 
-items.getItem("buying_BUILDING_ID").postUpdate(buying)
-items.getItem("quant_BUILDING_ID").postUpdate(quant)
-items.getItem("price_BUILDING_ID").postUpdate(price)
+function randomBid() {
+  var minPrice = 4;
+  var maxPrice = 30;
+  var price = minPrice + Math.random() * (maxPrice - minPrice);
+  return (Math.round(price) / 100);
+}
 
-console.log("BUILDING_ID: created bid")
+var dem = parseFloat(items.getItem("demand_BUILDING_ID").state);
+var sur = parseFloat(items.getItem("surplus_BUILDING_ID").state);
+var quant = Math.abs(dem - sur);
+var buying = dem > sur;
+var strat = items.getItem("strategy_BUILDING_ID").state;
+var bidPrice = 0
+
+if (strat == "learning") {
+  bidPrice = learningBid();
+} else {
+  bidPrice = randomBid();
+}
+
+items.getItem("buying_BUILDING_ID").postUpdate(String(buying));
+items.getItem("quant_BUILDING_ID").postUpdate(quant);
+items.getItem("price_BUILDING_ID").postUpdate(bidPrice);
+
+console.log("BUILDING_ID: created bid");

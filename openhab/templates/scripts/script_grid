@@ -1,12 +1,52 @@
+function updateProps(buying, quant, price) {
+  var rec = 0.08;
+  var exp = 0.99;
+  var minPrice = 4;
+  var maxPrice = 30;
+  var bidPrice = parseInt(items.getItem("price_BUILDING_ID").state*100);
+  var propItems = buying ? items.getItemsByTag("buying_prop_BUILDING_ID") : items.getItemsByTag("selling_prop_BUILDING_ID");
+  var propsLength = propItems.length
+
+  for (var propItem of propItems) {
+    var propPrice = propItem.name.split("_prop_")[1].split("_BUILDING_ID")[0];
+    var oldProp = parseFloat(propItem.state);
+    var newProp = 0;
+    if (bidPrice == propPrice) {
+      var r = 0;
+      if (buying) {
+        r = (quant * maxPrice / 100) - price;
+      } else {
+        r = price - (quant * minPrice / 100);
+      }
+      if ((1-rec)*oldProp + (1-exp)*r >= 0) {
+        newProp = (1-rec)*oldProp + (1-exp)*r
+      }
+    }
+    else {
+      newProp = oldProp * (1-rec+exp/(propsLength-1))
+    }
+    propItem.postUpdate(newProp)
+  }
+  return
+}
+
 var dem = parseFloat(items.getItem("demand_BUILDING_ID").state);
 var sur = parseFloat(items.getItem("surplus_BUILDING_ID").state);
 var n_opt = parseInt(items.getItem("n_opt_BUILDING_ID").state);
 
 var trans_quant = parseFloat(items.getItem("total_trans_quant_BUILDING_ID").state);
-var trans_buying = items.getItem("trans_buying_BUILDING_ID").state;
+var trans_buying = items.getItem("trans_buying_BUILDING_ID").state === "true";
+var trans_price = parseFloat(items.getItem("total_trans_price_BUILDING_ID").state);
 
-var from_grid = trans_buying == "true" ? dem - trans_quant : dem;
-var to_grid = trans_buying == "false" ? sur - trans_quant : sur;
+var from_grid = trans_buying ? dem - trans_quant : dem;
+var to_grid = trans_buying ? sur - trans_quant : sur;
+
+from_grid = Math.round(from_grid * 100) / 100;
+to_grid = Math.round(to_grid * 100) / 100;
+
+if (items.getItem("strategy_BUILDING_ID").state == "learning") {
+    updateProps(trans_buying, trans_quant, trans_price)
+}
 
 items.getItem("from_grid_BUILDING_ID").postUpdate(from_grid);
 items.getItem("to_grid_BUILDING_ID").postUpdate(to_grid);
@@ -20,5 +60,3 @@ payload = {
 }
 
 actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("data/grid/BUILDING_ID", JSON.stringify(payload), false)
-
-console.log("from: " + from_grid + ", to: " + to_grid);

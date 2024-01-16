@@ -1,0 +1,9 @@
+{
+  "members": [],
+  "type": "Group",
+  "name": "learning_bid_BUILDING_ID",
+  "label": "Learning Bid BUILDING_ID",
+  "category": "",
+  "tags": ["learning_bid"],
+  "groupNames": ["building_BUILDING_ID"]
+}

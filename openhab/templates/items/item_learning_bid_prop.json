@@ -1,0 +1,10 @@
+{
+  "type": "Number",
+  "name": "BUYING/SELLING_prop_PRICE_BUILDING_ID",
+  "label": "BUYING/SELLING Prop PRICE BUILDING_ID",
+  "category": "",
+  "tags": ["BUYING/SELLING_prop_BUILDING_ID"],
+  "groupNames": [
+    "learning_bid_BUILDING_ID"
+  ]
+}

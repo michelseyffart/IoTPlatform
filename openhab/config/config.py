@@ -54,7 +54,8 @@ def get_required_addons():
         return None
 
 
-def get_from_params(key):
+def get_from_params(query_key):
+    keys = query_key.split("/")
     try:
         with open(path_params_file, 'r') as f:
             params = json.load(f)
@@ -62,7 +63,10 @@ def get_from_params(key):
         log.warning(msg="Nothing in the params file.")
         return None
     try:
-        return params[key]
-    except KeyError:
-        log.exception(KeyError)
+        data = params[keys[0]]
+        for key in keys[1:]:
+            data = data[key]
+        return data
+    except KeyError as e:
+        log.exception(e)
         return None
