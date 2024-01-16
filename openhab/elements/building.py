@@ -473,10 +473,10 @@ def clear_building(building_id: str):
     rc = openhab_request(endpoint=f"/links/trans_buying_{building_id}/{channel_uid}", method="DELETE")
     log.info(f"Deleted Links for Transaction Buying {building_id}: {rc}")
 
-    channel_uid = f"{thing_building_uid}:total_trans_price"
+    channel_uid = f"{thing_building_uid}:total_trans_price_{building_id}"
     rc = openhab_request(endpoint=f"/links/total_trans_price_{building_id}/{channel_uid}", method="DELETE")
     log.info(f"Deleted Links for Total Transaction Quantity {building_id}: {rc}")
-    channel_uid = f"{thing_building_uid}:total_trans_quant"
+    channel_uid = f"{thing_building_uid}:total_trans_quant_{building_id}"
     rc = openhab_request(endpoint=f"/links/total_trans_quant_{building_id}/{channel_uid}", method="DELETE")
     log.info(f"Deleted Links for Total Transaction Price {building_id}: {rc}")
 
