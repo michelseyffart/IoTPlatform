@@ -13,7 +13,18 @@
          "type": "core.ItemStateUpdateTrigger"
         }
   ],
-  "conditions": [], "actions": [
+  "conditions": [
+    {
+      "inputs": {},
+      "id": "3",
+      "configuration": {
+        "itemName": "active_switch_BUILDING_ID",
+        "state": "ON",
+        "operator": "="
+      },
+      "type": "core.ItemStateCondition"
+    }
+  ], "actions": [
     {
       "inputs": {},
       "id": "2",
