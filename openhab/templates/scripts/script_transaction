@@ -1,0 +1,10 @@
+var new_trans_quant = parseFloat(items.getItem("trans_quant_BUILDING_ID").state)
+var new_trans_price = parseFloat(items.getItem("trans_price_BUILDING_ID").state)
+var old_total_trans_quant =  parseFloat(items.getItem("total_trans_quant_BUILDING_ID").state)
+var old_total_trans_price =  parseFloat(items.getItem("total_trans_price_BUILDING_ID").state)
+
+var new_total_trans_quant = new_trans_quant + old_total_trans_quant
+var new_total_trans_price = new_trans_price + old_total_trans_price
+
+items.getItem("total_trans_quant_BUILDING_ID").postUpdate(new_total_trans_quant)
+items.getItem("total_trans_price_BUILDING_ID").postUpdate(new_total_trans_price)

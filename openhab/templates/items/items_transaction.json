@@ -28,5 +28,25 @@
     "groupNames": [
       "building_BUILDING_ID"
   ]
+  },
+  {
+    "type": "Number",
+    "name": "total_trans_price_BUILDING_ID",
+    "label": "Total Transaction Price BUILDING_ID",
+    "category": "",
+    "tags": ["total_trans_price"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "total_trans_quant_BUILDING_ID",
+    "label": "Total Transaction Quantity BUILDING_ID",
+    "category": "",
+    "tags": ["total_trans_price"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
   }
 ]

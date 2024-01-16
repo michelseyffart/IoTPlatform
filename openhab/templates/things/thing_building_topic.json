@@ -146,6 +146,36 @@
         "stateTopic": "auction_iterations/Auction_Iteration:BUILDING_ID",
         "transformationPattern": "JSONPATH:$.step"
       }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:total_trans_price_BUILDING_ID",
+      "id": "total_trans_price_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Total Trans Price BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "BUILDING_ID/total_trans_price"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:total_trans_quant_BUILDING_ID",
+      "id": "total_trans_quant_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Total Trans Quantity BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "BUILDING_ID/total_trans_quant"
+      }
     }
   ]
 }

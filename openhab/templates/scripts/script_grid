@@ -2,7 +2,7 @@ var dem = parseFloat(items.getItem("demand_BUILDING_ID").state);
 var sur = parseFloat(items.getItem("surplus_BUILDING_ID").state);
 var n_opt = parseInt(items.getItem("n_opt_BUILDING_ID").state);
 
-var trans_quant = parseFloat(items.getItem("trans_quant_BUILDING_ID").state);
+var trans_quant = parseFloat(items.getItem("total_trans_quant_BUILDING_ID").state);
 var trans_buying = items.getItem("trans_buying_BUILDING_ID").state;
 
 var from_grid = trans_buying == "true" ? dem - trans_quant : dem;
@@ -10,6 +10,8 @@ var to_grid = trans_buying == "false" ? sur - trans_quant : sur;
 
 items.getItem("from_grid_BUILDING_ID").postUpdate(from_grid);
 items.getItem("to_grid_BUILDING_ID").postUpdate(to_grid);
+items.getItem("total_trans_price_BUILDING_ID").postUpdate(0);
+items.getItem("total_trans_quant_BUILDING_ID").postUpdate(0);
 
 payload = {
   "n_opt": n_opt,

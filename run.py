@@ -17,7 +17,9 @@ mqttc.connect("137.226.248.250")
 initial_values = {
     "n_opt": 0,
     "soc": 50,
-    "strategy": "random_bid"
+    "strategy": "random_bid",
+    "total_trans_quant": 0,
+    "total_trans_price": 0
 }
 
 buildings = [str(x) for x in range(20)]

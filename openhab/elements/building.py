@@ -234,6 +234,7 @@ def post_items_grid(building_id:str):
                          method="PUT")
     log.info(f"Posted Metadata From Grid {building_id}: {rc}")
 
+
 def post_items_transaction(building_id:str):
     with open(path_templates_folder/"items"/"items_transaction.json") as f:
         items_transaction_template = f.read()
@@ -249,6 +250,14 @@ def post_items_transaction(building_id:str):
     rc = openhab_request(payload=metadata_float, endpoint=f"/items/trans_price_{building_id}/metadata/stateDescription",
                          method="PUT")
     log.info(f"Posted Metadata Transaction Price {building_id}: {rc}")
+    rc = openhab_request(payload=metadata_float,
+                         endpoint=f"/items/total_trans_price_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Total Transaction Price {building_id}: {rc}")
+    rc = openhab_request(payload=metadata_float,
+                         endpoint=f"/items/total_trans_quant_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Total Transaction Price {building_id}: {rc}")
     with open(path_templates_folder/"metadata"/"metadata_string.json") as f:
         metadata_string = json.load(f)
     rc = openhab_request(payload=metadata_string, endpoint=f"/items/trans_buying_{building_id}/metadata/stateDescription",
@@ -277,6 +286,36 @@ def post_links_transaction(building_id: str):
     payload = {"itemName": item_name, "channelUID": channel_uid}
     rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
     log.info(f"Posted Link Transaction Quantity {building_id}: {rc}")
+
+    channel_uid = f"{thing_building_uid}:total_trans_quant_{building_id}"
+    item_name = f"total_trans_quant_{building_id}"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Total Transaction Quantity {building_id}: {rc}")
+
+    channel_uid = f"{thing_building_uid}:total_trans_price_{building_id}"
+    item_name = f"total_trans_price_{building_id}"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Total Transaction Price {building_id}: {rc}")
+
+
+def post_rule_transaction(building_id: str):
+    with open(path_templates_folder / "rules" / "rule_transaction.json") as f:
+        template_rule_transaction = f.read()
+    with open(path_templates_folder / "scripts" / "script_transaction") as f:
+        script_transaction_template = f.read()
+    rule_uid = str(uuid.uuid4()).split("-")[0]
+    template_rule_transaction = template_rule_transaction.replace(
+        "RULE_UID", rule_uid).replace(
+        "BUILDING_ID", building_id)
+    script_transaction = script_transaction_template.replace(
+        "BUILDING_ID", building_id)
+    rule_transaction = json.loads(template_rule_transaction)
+    rule_transaction["actions"][0]["configuration"]["script"] = script_transaction
+    save_to_config(key=f"rule_transaction_{building_id}_uid", value=rule_uid)
+    rc = openhab_request(payload=rule_transaction, endpoint="/rules", method="POST")
+    log.info(f"Posted Rule Transaction {building_id}: {rc}")
 
 
 def post_rule_bid_to_fiware(building_id: str):
@@ -377,6 +416,7 @@ def setup_building(building_id: str):
     post_rule_timer(building_id)
     post_rule_bid(building_id)
     post_rule_bid_to_fiware(building_id)
+    post_rule_transaction(building_id)
     post_items_bid(building_id)
     post_items_transaction(building_id)
     post_items_auction_iteration(building_id)
@@ -433,6 +473,13 @@ def clear_building(building_id: str):
     rc = openhab_request(endpoint=f"/links/trans_buying_{building_id}/{channel_uid}", method="DELETE")
     log.info(f"Deleted Links for Transaction Buying {building_id}: {rc}")
 
+    channel_uid = f"{thing_building_uid}:total_trans_price"
+    rc = openhab_request(endpoint=f"/links/total_trans_price_{building_id}/{channel_uid}", method="DELETE")
+    log.info(f"Deleted Links for Total Transaction Quantity {building_id}: {rc}")
+    channel_uid = f"{thing_building_uid}:total_trans_quant"
+    rc = openhab_request(endpoint=f"/links/total_trans_quant_{building_id}/{channel_uid}", method="DELETE")
+    log.info(f"Deleted Links for Total Transaction Price {building_id}: {rc}")
+
     channel_uid = f"{thing_building_uid}:auction_iter_quant_{building_id}"
     rc = openhab_request(endpoint=f"/links/auction_iter_quant_{building_id}/{channel_uid}", method="DELETE")
     log.info(f"Deleted Links for Auction Iteration Quantity {building_id}: {rc}")
@@ -484,6 +531,15 @@ def clear_building(building_id: str):
     log.info(f"Deleted Item From grid {building_id}: {rc}")
     rc = openhab_request(endpoint=f"/items/to_grid_{building_id}", method="DELETE")
     log.info(f"Deleted Item To grid {building_id}: {rc}")
+
+    rc = openhab_request(endpoint=f"/items/total_trans_price_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Total Transaction Price {building_id}: {rc}")
+    rc = openhab_request(endpoint=f"/items/total_trans_quant_{building_id}", method="DELETE")
+    log.info(f"Deleted Item Total Transaction Quantity {building_id}: {rc}")
+
+    rule_transaction_uid = get_from_config(key=f"rule_transaction_{building_id}_uid")
+    rc = openhab_request(endpoint=f"/rules/{rule_transaction_uid}", method="DELETE")
+    log.info(f"Deleted Rule Transaction {building_id}: {rc}")
 
 
 if __name__ == "__main__":
