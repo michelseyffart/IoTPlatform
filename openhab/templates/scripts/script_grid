@@ -1,10 +1,15 @@
 function updateProps(buying, quant, price) {
   var rec = 0.08;
-  var exp = 0.99;
+  var exp = 0.995;
   var minPrice = 4;
   var maxPrice = 30;
   var bidPrice = parseInt(items.getItem("price_BUILDING_ID").state*100);
-  var propItems = buying ? items.getItemsByTag("buying_prop_BUILDING_ID") : items.getItemsByTag("selling_prop_BUILDING_ID");
+  var bidQuantity = parseFloat(items.getItem("quant_BUILDING_ID").state);
+  var bidBuying = items.getItem("buying_BUILDING_ID").state === "true";
+  if (bidQuantity == 0) {
+    return
+  }
+  var propItems = bidBuying ? items.getItemsByTag("buying_prop_BUILDING_ID") : items.getItemsByTag("selling_prop_BUILDING_ID");
   var propsLength = propItems.length
 
   for (var propItem of propItems) {
@@ -20,6 +25,8 @@ function updateProps(buying, quant, price) {
       }
       if ((1-rec)*oldProp + (1-exp)*r >= 0) {
         newProp = (1-rec)*oldProp + (1-exp)*r
+      } else {
+        newProp = 0
       }
     }
     else {
@@ -39,7 +46,7 @@ var trans_buying = items.getItem("trans_buying_BUILDING_ID").state === "true";
 var trans_price = parseFloat(items.getItem("total_trans_price_BUILDING_ID").state);
 
 var from_grid = trans_buying ? dem - trans_quant : dem;
-var to_grid = trans_buying ? sur - trans_quant : sur;
+var to_grid = trans_buying ? sur : sur - trans_quant;
 
 from_grid = Math.round(from_grid * 100) / 100;
 to_grid = Math.round(to_grid * 100) / 100;
