@@ -1,0 +1,30 @@
+{
+  "uid": "RULE_UID",
+  "name": "Bid Adjustment BUILDING_ID",
+  "tags": [],
+  "visibility": "VISIBLE",
+  "editable": true,
+  "triggers": [
+     {
+       "id": "1",
+       "configuration": {
+         "itemName": "equilibrium_price"
+         },
+         "type": "core.ItemStateUpdateTrigger"
+        }
+  ],
+  "conditions": [],
+  "actions": [
+    {
+      "inputs": {},
+      "id": "2",
+      "configuration": {
+        "type": "application/javascript;version=ECMAScript-2021",
+        "script": ""
+      },
+      "type": "script.ScriptAction"
+    }
+  ],
+  "configuration": {},
+  "configDescriptions": []
+}

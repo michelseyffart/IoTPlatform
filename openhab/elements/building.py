@@ -445,6 +445,24 @@ def post_items_learning_bid(building_id: str):
             log.info(f"Posted Link {bid_type} Prop {price} {building_id}: {rc}")
 
 
+def post_rule_bid_adjustment(building_id: str):
+    with open(path_templates_folder / "rules" / "rule_bid_adjustment.json") as f:
+        template_rule_bid_adjustment = f.read()
+    with open(path_templates_folder / "scripts" / "script_bid_adjustment") as f:
+        script_bid_adjustment_template = f.read()
+    rule_uid = str(uuid.uuid4()).split("-")[0]
+    template_rule_bid_adjustment = template_rule_bid_adjustment.replace(
+        "RULE_UID", rule_uid).replace(
+        "BUILDING_ID", building_id)
+    script_bid_adjustment = script_bid_adjustment_template.replace(
+        "BUILDING_ID", building_id)
+    rule_bid_adjustment = json.loads(template_rule_bid_adjustment)
+    rule_bid_adjustment["actions"][0]["configuration"]["script"] = script_bid_adjustment
+    save_to_config(key=f"rule_bid_adjustment_{building_id}_uid", value=rule_uid)
+    rc = openhab_request(payload=rule_bid_adjustment, endpoint="/rules", method="POST")
+    log.info(f"Posted Rule bid_adjustment {building_id}: {rc}")
+
+
 def setup_building(building_id: str):
     post_group(building_id)
     post_item_demand(building_id)
@@ -469,6 +487,7 @@ def setup_building(building_id: str):
     post_items_auction_iteration(building_id)
     post_link_gateway(building_id)
     post_items_learning_bid(building_id)
+    post_rule_bid_adjustment(building_id)
 
 
 def clear_building(building_id: str):

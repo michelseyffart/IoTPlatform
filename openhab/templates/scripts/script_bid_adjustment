@@ -1,0 +1,6 @@
+var equilibriumPrice = parseFloat(items.getItem("equilibrium_price").state)
+var oldBidPrice = parseFloat(items.getItem("price_BUILDING_ID").state)
+
+var newBidPrice = oldBidPrice + ((equilibriumPrice - oldBidPrice) * 0.2)
+newBidPrice = Math.round(newBidPrice * 100) / 100
+items.getItem("price_BUILDING_ID").postUpdate(newBidPrice)

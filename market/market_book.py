@@ -71,3 +71,7 @@ class MarketBook:
         self.selling_bids.clear()
         self.transactions.clear()
         self.transaction_info.clear()
+
+    def update_public_info(self, public_info: PublicInfo):
+        self.public_info = public_info
+        self.data_collector.save_data(data=public_info)

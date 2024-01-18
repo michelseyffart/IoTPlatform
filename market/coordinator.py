@@ -89,11 +89,22 @@ class Coordinator:
         self.log.info("Auction complete")
 
     def whole_iter_auction(self):
-        print("Running auction")
-        bids = self.collect_bids()
-        auction_iter = iterating_auction.run_auction(bids=bids)
-        self.post_auction_iteration()
-        print("Ran auction")
+        self.log.info("Running iterating auction")
+        auction_iteration = 0
+        iteration_limit = 3
+        while auction_iteration < iteration_limit:
+            bids = self.collect_bids()
+            self.book.add_bids(bids=bids)
+            self.book.separate_bids()
+            self.book.sort_bids()
+            public_info = iterating_auction.calculate_equilibrium(buying_bids=self.book.buying_bids,
+                                                                  selling_bids=self.book.selling_bids)
+            self.book.update_public_info(public_info=public_info)
+            self.post_public_info()
+            auction_iteration += 1
+            time.sleep(0.3)
+        self.whole_single_auction()
+        self.log.info("Auction complete")
 
     def coordinator_loop(self, clearing_mechanism: str, duration: int = 180):
         self.log.info("Starting coordinator")
@@ -108,6 +119,13 @@ class Coordinator:
         elif clearing_mechanism in ["continuous", "c"]:
             while datetime.datetime.now() < stop_time:
                 self.whole_continuous_auction()
+        elif clearing_mechanism in ["iterative", "iterating", "i"]:
+            while datetime.datetime.now() < stop_time:
+                seconds = int(datetime.datetime.now().strftime("%S"))
+                if (seconds - self.auction_time) % self.step_length == 0:
+                    self.whole_iter_auction()
+                    time.sleep(1)
+                time.sleep(0.1)
 
 
 if __name__ == "__main__":
