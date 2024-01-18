@@ -1,0 +1,12 @@
+var buying = (items.getItem("buying_BUILDING_ID").state == "true")
+var price = items.getItem("adjusted_price_BUILDING_ID").state
+var quant = items.getItem("quant_BUILDING_ID").state
+var time = Date.now()
+var payload = {
+  bid_buying: buying,
+  bid_price: price,
+  bid_quantity: quant,
+  bid_time: time
+}
+actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("json/bid/BUILDING_ID/attrs", JSON.stringify(payload), false)
+console.log("BUILDING_ID: sent bid to FIWARE")

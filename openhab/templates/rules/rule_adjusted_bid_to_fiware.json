@@ -1,0 +1,40 @@
+{
+  "uid": "RULE_UID",
+  "name": "Bid to Fiware BUILDING_ID",
+  "tags": [],
+  "visibility": "VISIBLE",
+  "editable": true,
+  "triggers": [
+     {
+       "id": "1",
+       "configuration": {
+         "itemName": "adjusted_price_BUILDING_ID"
+         },
+         "type": "core.ItemStateUpdateTrigger"
+        }
+  ],
+  "conditions": [
+    {
+      "inputs": {},
+      "id": "3",
+      "configuration": {
+        "itemName": "gateway_BUILDING_ID",
+        "state": "ON",
+        "operator": "="
+      },
+      "type": "core.ItemStateCondition"
+    }
+  ], "actions": [
+    {
+      "inputs": {},
+      "id": "2",
+      "configuration": {
+        "type": "application/javascript;version=ECMAScript-2021",
+        "script": ""
+      },
+      "type": "script.ScriptAction"
+    }
+  ],
+  "configuration": {},
+  "configDescriptions": []
+}

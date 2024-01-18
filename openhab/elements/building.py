@@ -338,6 +338,26 @@ def post_rule_bid_to_fiware(building_id: str):
     log.info(f"Posted Rule Bid to Fiware {building_id}: {rc}")
 
 
+def post_rule_adjusted_bid_to_fiware(building_id: str):
+    with open(path_templates_folder / "rules" / "rule_adjusted_bid_to_fiware.json") as f:
+        template_rule_adjusted_bid_to_fiware = f.read()
+    with open(path_templates_folder / "scripts" / "script_adjusted_bid_to_fiware") as f:
+        script_adjusted_bid_to_fiware_template = f.read()
+    rule_uid = str(uuid.uuid4()).split("-")[0]
+    template_rule_adjusted_bid_to_fiware = template_rule_adjusted_bid_to_fiware.replace(
+        "RULE_UID", rule_uid).replace(
+        "BUILDING_ID", building_id)
+    bridge_uid = get_from_config(key="bridge_uid")
+    script_adjusted_bid_to_fiware = script_adjusted_bid_to_fiware_template.replace(
+        "BUILDING_ID", building_id).replace(
+        "BRIDGE_UID", bridge_uid)
+    rule_adjusted_bid_to_fiware = json.loads(template_rule_adjusted_bid_to_fiware)
+    rule_adjusted_bid_to_fiware["actions"][0]["configuration"]["script"] = script_adjusted_bid_to_fiware
+    save_to_config(key=f"rule_adjusted_bid_to_fiware_{building_id}_uid", value=rule_uid)
+    rc = openhab_request(payload=rule_adjusted_bid_to_fiware, endpoint="/rules", method="POST")
+    log.info(f"Posted Rule Bid to Fiware {building_id}: {rc}")
+
+
 def post_items_auction_iteration(building_id: str):
     with open(path_templates_folder/"items"/"items_auction_iteration.json") as f:
         items_auction_iteration_template = f.read()
@@ -474,6 +494,7 @@ def setup_building(building_id: str):
     post_rule_timer(building_id)
     post_rule_bid(building_id)
     post_rule_bid_to_fiware(building_id)
+    post_rule_adjusted_bid_to_fiware(building_id)
     post_rule_transaction(building_id)
     post_items_bid(building_id)
     post_items_transaction(building_id)

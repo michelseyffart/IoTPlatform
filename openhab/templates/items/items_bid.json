@@ -29,12 +29,22 @@
       "building_BUILDING_ID"
   ]
   },
-    {
+  {
     "type": "String",
     "name": "strategy_BUILDING_ID",
     "label": "Strategy BUILDING_ID",
     "category": "",
     "tags": ["bid_strat"],
+    "groupNames": [
+      "building_BUILDING_ID"
+  ]
+  },
+  {
+    "type": "Number",
+    "name": "adjusted_price_BUILDING_ID",
+    "label": "Adjusted Price BUILDING_ID",
+    "category": "",
+    "tags": ["adjusted_bid_price"],
     "groupNames": [
       "building_BUILDING_ID"
   ]
