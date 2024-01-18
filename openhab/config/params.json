@@ -7,5 +7,6 @@
     "min_price": 4,
     "max_price": 30,
     "step_width": 1
-  }
+  },
+  "scenario": "pv"
 }

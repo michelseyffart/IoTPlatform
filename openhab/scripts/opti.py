@@ -26,7 +26,11 @@ def main():
     n_building = 0
     if len(sys.argv) > 3:
         n_building = int(sys.argv[3])
-    node = read_node(n_building)
+    if len(sys.argv) > 4:
+        scenario = "_" + sys.argv[4]
+    else:
+        scenario = ""
+    node = read_node(scenario, n_building)
     params = read_params()
     options = read_options()
     par_rh = read_par_rh()
@@ -34,8 +38,8 @@ def main():
     print(res)
 
 
-def read_node(n):
-    path_nodes = data_folder.joinpath("nodes.p")
+def read_node(scenario, n):
+    path_nodes = data_folder.joinpath(f"nodes{scenario}.p")
     with path_nodes.open("rb") as f:
         nodes = pickle.load(f)
     return nodes[n]
@@ -101,7 +105,7 @@ def compute(node, params, par_rh, init_val, n_opt, options):
         param02 = int(par_rh["org_time_steps"][n_opt][i]/discretization_input_data)
         if param01 < 1:
             raise ValueError("Interpolation of input data necessary")
-        elif options["number_typeWeeks"] == 0:
+        else:
             elec[param00] = np.mean([node["elec"][param02], node["elec"][param02 + param01 - 1]])
             heat[param00] = np.mean([node["heat"][param02], node["heat"][param02 + param01 - 1]])
             dhw[param00] = np.mean([node["dhw"][param02], node["dhw"][param02 + param01 - 1]])
@@ -110,15 +114,7 @@ def compute(node, params, par_rh, init_val, n_opt, options):
             PV_GEN[param00] = np.mean([node["pv_power"][param02], node["pv_power"][param02 + param01 - 1]])
             EV_AVAIL[param00] = np.mean([node["ev_avail"][param02], node["ev_avail"][param02 + param01 - 1]])
             EV_DEM_LEAVE[param00] = np.mean([node["ev_dem_leave"][param02], node["ev_dem_leave"][param02 + param01 - 1]])
-        else:
-            elec[param00] = np.mean([node["elec_appended"][param02], node["elec_appended"][param02 + param01 - 1]])
-            heat[param00] = np.mean([node["heat_appended"][param02], node["heat_appended"][param02 + param01 - 1]])
-            dhw[param00] = np.mean([node["dhw_appended"][param02], node["dhw_appended"][param02 + param01 - 1]])
-            COP35[param00] = np.mean([node["devs"]["COP_sh35_appended"][param02], node["devs"]["COP_sh35_appended"][param02 + param01 - 1]])
-            COP55[param00] = np.mean([node["devs"]["COP_sh55_appended"][param02], node["devs"]["COP_sh55_appended"][param02 + param01 - 1]])
-            #PV_GEN[param00] = np.mean([node["pv_power_appended"][param02], node["pv_power_appended"][param02 + param01 - 1]])
-            EV_AVAIL[param00] = np.mean([node["ev_avail_appended"][param02], node["ev_avail_appended"][param02 + param01 - 1]])
-            EV_DEM_LEAVE[param00] = np.mean([node["ev_dem_leave_appended"][param02], node["ev_dem_leave_appended"][param02 + param01 - 1]])
+
 
         demands = {
         "elec": elec,
@@ -126,7 +122,7 @@ def compute(node, params, par_rh, init_val, n_opt, options):
         "dhw": dhw,
         "COP35": COP35,
         "COP55": COP55,
-        #"PV_GEN": PV_GEN,
+        "PV_GEN": PV_GEN,
         "EV_AVAIL": EV_AVAIL,
         "EV_DEM_LEAVE": EV_DEM_LEAVE,
         }
@@ -308,15 +304,15 @@ def compute(node, params, par_rh, init_val, n_opt, options):
                         name="Power_equation_" + dev + "_" + str(t))
 
     # Solar components
-    #for dev in solar:
-    #    for t in time_steps:
-    #        model.addConstr(power[dev][t] == node["pv_power"][t],
-    #                        name="Solar_electrical_" + dev + "_" + str(t))
+    for dev in solar:
+        for t in time_steps:
+            model.addConstr(power[dev][t] == demands["PV_GEN"][t],
+                            name="Solar_electrical_" + dev + "_" + str(t))
 
 
     #set solar to 0
-    for t in time_steps:
-        model.addConstr(power["pv"][t] == 0, name="Solar_electrical_pv_" + str(t))
+    #for t in time_steps:
+    #    model.addConstr(power["pv"][t] == 0, name="Solar_electrical_pv_" + str(t))
     # %% BUILDING STORAGES # %% DOMESTIC FLEXIBILITIES
 
     ## Nominal storage content (SOC)
