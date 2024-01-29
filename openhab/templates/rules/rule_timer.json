@@ -39,15 +39,6 @@
         "script": ""
       },
       "type": "script.ScriptAction"
-    },
-    {
-      "inputs": {},
-      "id": "2",
-      "configuration": {
-        "type": "application/javascript;version=ECMAScript-2021",
-        "script": ""
-      },
-      "type": "script.ScriptAction"
     }
   ],
   "configuration": {},

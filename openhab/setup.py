@@ -16,10 +16,10 @@ def clear_everything(buildings: list):
     delete_mqtt_structure()
 
 
-def setup_everything(buildings: list):
+def setup_everything(buildings: list, pre_optimized: bool):
     setup_mqtt_structure()
     for building in buildings:
-        setup_building(building)
+        setup_building(building, pre_optimized=pre_optimized)
 
 
 def reset():

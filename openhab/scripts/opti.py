@@ -20,8 +20,7 @@ def main():
         init_val = {
             "soc": {
                 "tes": float(sys.argv[2]),
-                "bat": 0,
-                "ev": 0
+                "bat": 0
             }}
     n_building = 0
     if len(sys.argv) > 3:
@@ -74,7 +73,7 @@ def compute(node, params, par_rh, init_val, n_opt, options):
 
     # Define subsets
     heater = ("boiler", "chp", "eh", "hp35", "hp55")
-    storage = ("bat", "tes", "ev")
+    storage = ("bat", "tes")
     solar = ("pv", )    #, "stc"
     device = ("boiler", "chp", "eh", "hp35", "hp55", "bat", "tes", "pv")
 
@@ -96,36 +95,23 @@ def compute(node, params, par_rh, init_val, n_opt, options):
     COP35 = {}
     COP55 = {}
     PV_GEN = {}
-    EV_AVAIL = {}
-    EV_DEM_LEAVE = {}
 
-    for i in range(len(time_steps)):
-        param00 = time_steps[i]
-        param01 = int(dt[param00]/discretization_input_data)
-        param02 = int(par_rh["org_time_steps"][n_opt][i]/discretization_input_data)
-        if param01 < 1:
-            raise ValueError("Interpolation of input data necessary")
-        else:
-            elec[param00] = np.mean([node["elec"][param02], node["elec"][param02 + param01 - 1]])
-            heat[param00] = np.mean([node["heat"][param02], node["heat"][param02 + param01 - 1]])
-            dhw[param00] = np.mean([node["dhw"][param02], node["dhw"][param02 + param01 - 1]])
-            COP35[param00] = np.mean([node["devs"]["COP_sh35"][param02], node["devs"]["COP_sh35"][param02 + param01 - 1]])
-            COP55[param00] = np.mean([node["devs"]["COP_sh55"][param02], node["devs"]["COP_sh55"][param02 + param01 - 1]])
-            PV_GEN[param00] = np.mean([node["pv_power"][param02], node["pv_power"][param02 + param01 - 1]])
-            EV_AVAIL[param00] = np.mean([node["ev_avail"][param02], node["ev_avail"][param02 + param01 - 1]])
-            EV_DEM_LEAVE[param00] = np.mean([node["ev_dem_leave"][param02], node["ev_dem_leave"][param02 + param01 - 1]])
+    for t in time_steps:
+        elec[t] = node["elec"][t]
+        heat[t] = node["heat"][t]
+        dhw[t] = node["dhw"][t]
+        COP35[t] = node["devs"]["COP_sh35"][t]
+        COP55[t] = node["devs"]["COP_sh55"][t]
+        PV_GEN[t] = node["pv_power"][t]
 
-
-        demands = {
-        "elec": elec,
-        "heat": heat,
-        "dhw": dhw,
-        "COP35": COP35,
-        "COP55": COP55,
-        "PV_GEN": PV_GEN,
-        "EV_AVAIL": EV_AVAIL,
-        "EV_DEM_LEAVE": EV_DEM_LEAVE,
-        }
+    demands = {
+    "elec": elec,
+    "heat": heat,
+    "dhw": dhw,
+    "COP35": COP35,
+    "COP55": COP55,
+    "PV_GEN": PV_GEN
+    }
 
     model = gp.Model("Operation computation", env=env)
 
@@ -192,7 +178,6 @@ def compute(node, params, par_rh, init_val, n_opt, options):
     soc_init = {}
     soc_init["tes"] = soc_nom["tes"] * 0.5  # kWh   Initial SOC TES
     soc_init["bat"] = soc_nom["bat"] * 0.5  # kWh   Initial SOC Battery
-    soc_init["ev"] = soc_nom["ev"] * 0.75
 
     # Electricity imports, sold and self-used electricity
     p_imp = {}
@@ -224,7 +209,7 @@ def compute(node, params, par_rh, init_val, n_opt, options):
     # Activation decision variables
     # binary variable for each house to avoid simuultaneous feed-in and purchase of electric energy
     y = {}
-    for dev in ["bat", "ev", "house_load"]:
+    for dev in ["bat", "house_load"]:
         y[dev] = {}
         for t in time_steps:
             y[dev][t] = model.addVar(vtype="B", lb=0.0, ub=1.0, name="y_" + dev + "_" + str(t))
@@ -395,41 +380,10 @@ def compute(node, params, par_rh, init_val, n_opt, options):
                               p_dch[dev][t]),
                         name="Storage_balance_" + dev + "_" + str(t))
 
-    # %% EV CONSTRAINTS CONSTRAINTS
-    dev = "ev"
-    # Energy balance
-    for t in time_steps:
-        # Initial SOC is the SOC at the beginning of the first time step, thus it equals the SOC at the end of the previous time step
-        if t == par_rh["hour_start"][n_opt] and t > par_rh["month_start"][par_rh["month"]]:
-            soc_prev = soc_init_rh[dev]
-        elif t == par_rh["month_start"][par_rh["month"]]:
-            soc_prev = soc_init[dev]
-        else:
-            soc_prev = soc[dev][t - 1]
-
-        model.addConstr(soc[dev][t] == soc_prev
-                        + p_ch[dev][t] * node["devs"][dev]["eta_ch_ev"] * dt[t]
-                        - p_dch[dev][t] / node["devs"][dev]["eta_dch_ev"] * dt[t]
-                        - demands["EV_DEM_LEAVE"][t])
-
-        # TODO:
-        # if t == last_time_step:
-        #    model.addConstr(soc_dom[device][n][t] == soc_init[device][n])
-
-        model.addConstr(p_dch[dev][t] <= demands["EV_AVAIL"][t] * node["devs"][dev]["max_dch_ev"])
-        model.addConstr(p_ch[dev][t] <= demands["EV_AVAIL"][t] * node["devs"][dev]["max_ch_ev"])
-
-        model.addConstr(p_dch[dev][t] <= y[dev][t] * node["devs"][dev]["max_dch_ev"],
-                        name="Binary1_ev" + "_" + str(t))
-        model.addConstr(p_ch[dev][t] <= (1 - y[dev][t]) * node["devs"][dev]["max_ch_ev"],
-                        name="Binary2_ev" + "_" + str(t))
-
-        model.addConstr(soc[dev][t] >= node["devs"][dev]["min_soc"] * node["devs"][dev]["cap"])
-        model.addConstr(soc[dev][t] <= node["devs"][dev]["max_soc"] * node["devs"][dev]["cap"])
 
     # Electricity balance (house)
     for t in time_steps:
-        model.addConstr(demands["elec"][t] + p_ch["bat"][t] - p_dch["bat"][t] + p_ch["ev"][t] - p_dch["ev"][t]
+        model.addConstr(demands["elec"][t] + p_ch["bat"][t] - p_dch["bat"][t]
                         + power["hp35"][t] + power["hp55"][t] + power["eh"][t] - p_use["chp"][t] - p_use["pv"][t]
                         == p_imp[t],
                         name="Electricity_balance_" + str(t))
@@ -487,7 +441,7 @@ def compute(node, params, par_rh, init_val, n_opt, options):
     res_power = {}
     res_heat = {}
     res_soc = {}
-    for dev in ["bat", "ev", "house_load"]:
+    for dev in ["bat", "house_load"]:
         res_y[dev] = {(t): y[dev][t].X for t in time_steps}
     for dev in ["hp35", "hp55", "chp", "boiler"]:
         res_power[dev] = {(t): power[dev][t].X for t in time_steps}
@@ -567,7 +521,7 @@ def compute_initial_values(opti_bes, par_rh, n_opt):
     init_val = {}
     init_val["soc"] = {}
     # initial SOCs
-    for dev in ["tes", "bat", "ev"]:
+    for dev in ["tes", "bat"]:
         init_val["soc"][dev] = opti_bes[3][dev][par_rh["hour_start"][n_opt] + par_rh["n_hours"] - par_rh["n_hours_ov"]]
 
     return init_val
@@ -584,14 +538,13 @@ def initial_values_flex(opti_res, par_rh, n_opt, nodes, options, trade_res, prev
 
     for n in range(options["nb_bes"]):
 
-        init_val["building_" + str(n)] = {"soc": {"tes": {}, "bat": {}, "ev": {}}}
+        init_val["building_" + str(n)] = {"soc": {"tes": {}, "bat": {}}}
 
         # if it's the first timestep, storages are set to initial values of 50%/75%
         if t == par_rh["month_start"][par_rh["month"]]:
             soc_prev = {
                 "tes": nodes[n]["devs"]["tes"]["cap"] * 0.5,
-                "bat": nodes[n]["devs"]["bat"]["cap"] * 0.5,
-                "ev": nodes[n]["devs"]["ev"]["cap"] * 0.75
+                "bat": nodes[n]["devs"]["bat"]["cap"] * 0.5
             }
 
         # otherwise use initial values calculated in previous step
@@ -636,7 +589,6 @@ def initial_values_flex(opti_res, par_rh, n_opt, nodes, options, trade_res, prev
         # BAT & EV
         # TODO
         init_val["building_" + str(n)]["soc"]["bat"] = 0
-        init_val["building_" + str(n)]["soc"]["ev"] = 0
 
     return init_val
 

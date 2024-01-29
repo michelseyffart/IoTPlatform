@@ -13,7 +13,7 @@
     "ev_share": 0.0,
     "ev_public": true,
     "grid": false,
-    "discretization_input_data": 0.25,
+    "discretization_input_data": 1,
     "path_file": "D:/jsc-mse/Hiwi/P2P_Market",
     "path_results": "D:/jsc-mse/Hiwi/P2P_Market/results",
     "time_zone": 1,

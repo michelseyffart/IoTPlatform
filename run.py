@@ -48,9 +48,9 @@ def stop_buildings():
     log.info("Stopped buildings")
 
 
-def setup():
+def setup(pre_optimized: bool = False):
     log.info("Setting up openHAB")
-    setup_everything(buildings=buildings)
+    setup_everything(buildings=buildings, pre_optimized=pre_optimized)
     log.info("Set up complete")
 
 
@@ -72,6 +72,7 @@ def run_simulation(clearing_mechanism: str, duration: int = 180):
     start_buildings()
     time.sleep(1)
     c.coordinator_loop(duration=duration, clearing_mechanism=clearing_mechanism)
+    time.sleep(0.2)
     stop_buildings()
     time.sleep(2)
     data_collector.stop()
@@ -87,7 +88,7 @@ def setup_run_and_clear(clearing_mechanism: str, duration: int = 180):
 
 if __name__ == "__main__":
     clear()
-    setup()
+    setup(pre_optimized=True)
     set_initial_values()
     run_simulation(duration=60, clearing_mechanism="d")
     #clear()

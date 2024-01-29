@@ -100,14 +100,10 @@ def post_link_active_switch(building_id: str):
     log.info(f"Posted Link Active Switch: {rc}")
 
 
-def post_rule_timer(building_id: str):
+def post_rule_timer(building_id: str, pre_optimized):
     # create a Timer Rule that triggers an action every given interval
     with open(path_templates_folder/"rules"/"rule_timer.json") as f:
         template_rule_timer = f.read()
-    with open(path_templates_folder / "scripts" / "script_grid") as f:
-        script_grid_template = f.read()
-    with open(path_templates_folder/"scripts"/"script_opti") as f:
-        script_opti_template = f.read()
     rule_timer_uid = str(uuid.uuid4()).split("-")[0]
     param_time_for_step = get_from_params("time_for_step")
     param_random_start = get_from_params("range_for_random_start")
@@ -119,16 +115,24 @@ def post_rule_timer(building_id: str):
         "RANDOM_START", str(random_start)).replace(
         "LENGTH", str(param_time_for_step))
     bridge_uid = get_from_config(key="bridge_uid")
-    script_opti = script_opti_template.replace(
-        "BRIDGE_UID", bridge_uid).replace(
-        "BUILDING_ID", building_id).replace(
-        "SCENARIO", scenario)
-    script_grid = script_grid_template.replace(
-        "BRIDGE_UID", bridge_uid).replace(
-        "BUILDING_ID", building_id)
-    rule_timer = json.loads(template_rule_timer)
-    rule_timer["actions"][0]["configuration"]["script"] = script_grid
-    rule_timer["actions"][1]["configuration"]["script"] = script_opti
+    if pre_optimized:
+        with open(path_templates_folder / "scripts" / "script_grid_and_pre_optimized") as f:
+            script_pre_optimized_template = f.read()
+        script_pre_optimized = script_pre_optimized_template.replace(
+            "BRIDGE_UID", bridge_uid).replace(
+            "BUILDING_ID", building_id).replace(
+            "SCENARIO", scenario)
+        rule_timer = json.loads(template_rule_timer)
+        rule_timer["actions"][0]["configuration"]["script"] = script_pre_optimized
+    else:
+        with open(path_templates_folder / "scripts" / "script_grid_and_opti") as f:
+            script_grid_and_opti_template = f.read()
+        script_grid_and_opti = script_grid_and_opti_template.replace(
+            "BRIDGE_UID", bridge_uid).replace(
+            "BUILDING_ID", building_id).replace(
+            "SCENARIO", scenario)
+        rule_timer = json.loads(template_rule_timer)
+        rule_timer["actions"][0]["configuration"]["script"] = script_grid_and_opti
     save_to_config(key=f"rule_timer_{building_id}_uid", value=rule_timer_uid)
     rc = openhab_request(payload=rule_timer, endpoint="/rules", method="POST")
     log.info(f"Posted Rule Timer {building_id}: {rc}")
@@ -190,7 +194,7 @@ def post_rule_bid(building_id: str):
     rule_bid["actions"][0]["configuration"]["script"] = script_bid
     save_to_config(key=f"rule_bid_{building_id}_uid", value=rule_bid_uid)
     rc = openhab_request(payload=rule_bid, endpoint="/rules", method="POST")
-    log.info(f"Posted Rule Timer {building_id}: {rc}")
+    log.info(f"Posted Rule Bid {building_id}: {rc}")
 
 
 def post_items_bid(building_id:str):
@@ -208,6 +212,10 @@ def post_items_bid(building_id:str):
     rc = openhab_request(payload=metadata_float, endpoint=f"/items/price_{building_id}/metadata/stateDescription",
                          method="PUT")
     log.info(f"Posted Metadata Price {building_id}: {rc}")
+    rc = openhab_request(payload=metadata_float,
+                         endpoint=f"/items/adjusted_price_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Adjusted Price {building_id}: {rc}")
     with open(path_templates_folder/"metadata"/"metadata_string.json") as f:
         metadata_string = json.load(f)
     rc = openhab_request(payload=metadata_string, endpoint=f"/items/buying_{building_id}/metadata/stateDescription",
@@ -243,7 +251,7 @@ def post_items_transaction(building_id:str):
     items_transaction_template = items_transaction_template.replace("BUILDING_ID", building_id)
     items_transaction = json.loads(items_transaction_template)
     rc = openhab_request(payload=items_transaction, endpoint=f"/items/", method="PUT")
-    log.info(f"Posted Items Bid {building_id}: {rc}")
+    log.info(f"Posted Items Transaction {building_id}: {rc}")
     with open(path_templates_folder/"metadata"/"metadata_float.json") as f:
         metadata_float = json.load(f)
     rc = openhab_request(payload=metadata_float, endpoint=f"/items/trans_quant_{building_id}/metadata/stateDescription",
@@ -485,7 +493,7 @@ def post_rule_bid_adjustment(building_id: str):
     log.info(f"Posted Rule bid_adjustment {building_id}: {rc}")
 
 
-def setup_building(building_id: str):
+def setup_building(building_id: str, pre_optimized: bool = False):
     post_group(building_id)
     post_item_demand(building_id)
     post_item_surplus(building_id)
@@ -493,21 +501,18 @@ def setup_building(building_id: str):
     post_item_n_opt(building_id)
     post_item_active_switch(building_id)
     post_link_active_switch(building_id)
-    post_rule_timer(building_id)
+    post_rule_timer(building_id, pre_optimized=pre_optimized)
     post_rule_bid(building_id)
     post_rule_bid_to_fiware(building_id)
     post_rule_adjusted_bid_to_fiware(building_id)
     post_rule_transaction(building_id)
     post_items_bid(building_id)
     post_items_transaction(building_id)
-    post_items_auction_iteration(building_id)
     post_items_grid(building_id)
     post_item_gateway(building_id)
     post_thing_building_topic(building_id)
     post_links_building_values(building_id)
     post_links_transaction(building_id)
-    post_links_auction_iteration(building_id)
-    post_items_auction_iteration(building_id)
     post_link_gateway(building_id)
     post_items_learning_bid(building_id)
     post_rule_bid_adjustment(building_id)

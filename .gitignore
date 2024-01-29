@@ -3,4 +3,4 @@
 /logs
 !logs/create_logger.py
 /openhab/config/config.json
-/data_collection/rawdata
+/data_collection/rawdata_MQTT
