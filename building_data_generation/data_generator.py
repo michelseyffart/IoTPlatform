@@ -2,11 +2,14 @@ import json
 import classes.datahandler as datahandler
 import numpy as np
 import pickle
-import openhab.scripts.opti as opti
-import openhab.config.paths as paths
+import openhab.openhab_container_scripts.opti as opti
+from openhab.config.paths import path_openhab_container_scripts
+from pathlib import Path
 
 
-def read_demands():
+def calculate_nodes():
+    dir_path = Path(path_openhab_container_scripts.joinpath("data", "nodes", scenario_name))
+    dir_path.mkdir(parents=True, exist_ok=True)
     nodes = {}
     nb_bes = districtData.district.__len__()
     pv_exists = np.zeros(shape=(nb_bes, 1))
@@ -103,16 +106,20 @@ def read_demands():
         nodes[n]["devs"]["boiler"] = devs[n]["boiler"]
         nodes[n]["devs"]["bz"] = devs[n]["bz"]
 
+        with open(dir_path.joinpath(f"{n}.p"), "wb") as f:
+            pickle.dump(nodes[n], f)
+
     return nodes, devs
 
 
-def run_opti(nodes):
-    scripts_path = paths.path_scripts
-    with open(scripts_path.joinpath("data/par_rh.p"), "rb") as f:
+def calculate_opti_results(nodes):
+    dir_path = Path(path_openhab_container_scripts.joinpath("data", "opti_results", scenario_name))
+    dir_path.mkdir(parents=True, exist_ok=True)
+    with open(path_openhab_container_scripts.joinpath("data/par_rh.p"), "rb") as f:
         par_rh = pickle.load(f)
-    with open(scripts_path.joinpath("data/params.json"), "rb") as f:
+    with open(path_openhab_container_scripts.joinpath("data/params.json"), "rb") as f:
         params = json.load(f)
-    with open(scripts_path.joinpath("data/options.json"), "rb") as f:
+    with open(path_openhab_container_scripts.joinpath("data/options.json"), "rb") as f:
         options = json.load(f)
 
     init_val = {
@@ -121,7 +128,7 @@ def run_opti(nodes):
             "bat": 0
         }}
 
-    for n in range(len(nodes)):
+    for n in range(40):
         opti_res = {}
         for n_opt in range(8760):
             return_string = opti.compute(node=nodes[n], params=params, par_rh=par_rh, init_val=init_val,
@@ -130,7 +137,7 @@ def run_opti(nodes):
             opti_res[n_opt] = return_string
             print(f"Finished building {n}, step {n_opt}.")
         print(f"Finished building {n}.")
-        with open(f"opti_res/{n}.p", "wb") as f:
+        with open(dir_path.joinpath(f"{n}.p"), "wb") as f:
             pickle.dump(opti_res, f)
 
 
@@ -140,9 +147,6 @@ if __name__ == "__main__":
     districtData.generateDistrictComplete(scenario_name, calcUserProfiles=False, saveUserProfiles=True, )
     districtData.designDevicesComplete(saveGenerationProfiles=True)
 
-    nodes, devs = read_demands()
-    
-    with open(f"nodes_{scenario_name}.p", "wb") as f:
-        pickle.dump(nodes, f)
+    nodes, devs = calculate_nodes()
 
-    run_opti(nodes=nodes)
+    #calculate_opti_results(nodes=nodes)
