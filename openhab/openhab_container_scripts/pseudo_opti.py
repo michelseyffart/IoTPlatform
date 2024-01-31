@@ -13,7 +13,7 @@ def main():
         n_opt = int(sys.argv[1])
     n_building = 0
     if len(sys.argv) > 2:
-        n_building = int(sys.argv[2])
+        n_building = str(sys.argv[2])
     if len(sys.argv) > 3:
         scenario = sys.argv[3]
     else:

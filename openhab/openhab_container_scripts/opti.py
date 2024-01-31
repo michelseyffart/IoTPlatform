@@ -23,7 +23,7 @@ def main():
             }}
     n_building = 0
     if len(sys.argv) > 3:
-        n_building = int(sys.argv[3])
+        n_building = str(sys.argv[3])
     if len(sys.argv) > 4:
         scenario = sys.argv[4]
     else:
