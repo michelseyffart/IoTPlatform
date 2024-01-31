@@ -25,7 +25,7 @@ def calculate_opti_results(data):
 
 
 def save_opti_results(opti_res: dict, scenario: str):
-    dir_path = Path(path_openhab_container_scripts.joinpath("data", "opti_results", "WT"))
+    dir_path = Path(path_openhab_container_scripts.joinpath("data", "opti_results", scenario))
     dir_path.mkdir(parents=True, exist_ok=True)
     with open(dir_path.joinpath("WT.p"), "wb") as f:
         pickle.dump(opti_res, f)
