@@ -125,7 +125,7 @@ def calculate_opti_results(nodes):
     init_val = {
         "soc": {
             "tes": 0.0,
-            "bat": 0
+            "bat": 0.0
         }}
 
     for n in range(40):
@@ -133,7 +133,8 @@ def calculate_opti_results(nodes):
         for n_opt in range(8760):
             return_string = opti.compute(node=nodes[n], params=params, par_rh=par_rh, init_val=init_val,
                                          options=options, n_opt=n_opt)
-            init_val["soc"]["tes"] = float(return_string.split("res_soc:")[1])
+            init_val["soc"]["tes"] = float(return_string.split("res_soc_tes:")[1].split(",")[0])
+            init_val["soc"]["bat"] = float(return_string.split("res_soc_bat:")[1])
             opti_res[n_opt] = return_string
             print(f"Finished building {n}, step {n_opt}.")
         print(f"Finished building {n}.")

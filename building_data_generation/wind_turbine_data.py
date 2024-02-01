@@ -20,7 +20,7 @@ def generate_data():
 def calculate_opti_results(data):
     opti_res = dict()
     for n_opt in range(8760):
-        opti_res[n_opt] = f"surplus:{data[n_opt]}, demand:0, res_soc:0"
+        opti_res[n_opt] = f"surplus:{data[n_opt]}, demand:0, res_soc_tes:0, res_soc_bat:0"
     return opti_res
 
 

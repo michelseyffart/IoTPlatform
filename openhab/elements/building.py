@@ -50,11 +50,13 @@ def post_item_soc(building_id: str):
         item_soc_template = f.read()
     item_soc_template = item_soc_template.replace("BUILDING_ID", building_id)
     item_soc = json.loads(item_soc_template)
-    rc = openhab_request(payload=item_soc, endpoint=f"/items/soc_{building_id}", method="PUT")
-    log.info(f"Posted Item Soc {building_id}: {rc}")
+    rc = openhab_request(payload=item_soc, endpoint=f"/items/", method="PUT")
+    log.info(f"Posted Items Soc {building_id}: {rc}")
     with open(path_templates_folder/"metadata"/"metadata_float.json") as f:
         metadata_float = json.load(f)
-    rc = openhab_request(payload=metadata_float, endpoint=f"/items/soc_{building_id}/metadata/stateDescription",
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/soc_tes_{building_id}/metadata/stateDescription",
+                         method="PUT")
+    rc = openhab_request(payload=metadata_float, endpoint=f"/items/soc_bat_{building_id}/metadata/stateDescription",
                          method="PUT")
     log.info(f"Posted Metadata Soc {building_id}: {rc}")
 
@@ -160,11 +162,17 @@ def post_links_building_values(building_id: str):
     # create a links
     thing_building_uid = get_from_config(key=f"thing_building_{building_id}_uid")
 
-    channel_uid = f"{thing_building_uid}:soc_{building_id}"
-    item_name = f"soc_{building_id}"
+    channel_uid = f"{thing_building_uid}:soc_tes_{building_id}"
+    item_name = f"soc_tes_{building_id}"
     payload = {"itemName": item_name, "channelUID": channel_uid}
     rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
-    log.info(f"Posted Link Soc {building_id}: {rc}")
+    log.info(f"Posted Link Soc Tes {building_id}: {rc}")
+
+    channel_uid = f"{thing_building_uid}:soc_bat_{building_id}"
+    item_name = f"soc_bat_{building_id}"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Soc Bat {building_id}: {rc}")
 
     channel_uid = f"{thing_building_uid}:n_opt_{building_id}"
     item_name = f"n_opt_{building_id}"

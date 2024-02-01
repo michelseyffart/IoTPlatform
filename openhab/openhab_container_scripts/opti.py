@@ -19,13 +19,13 @@ def main():
         init_val = {
             "soc": {
                 "tes": float(sys.argv[2]),
-                "bat": 0
+                "bat": float(sys.argv[3])
             }}
     n_building = 0
-    if len(sys.argv) > 3:
-        n_building = str(sys.argv[3])
     if len(sys.argv) > 4:
-        scenario = sys.argv[4]
+        n_building = str(sys.argv[4])
+    if len(sys.argv) > 5:
+        scenario = sys.argv[5]
     else:
         scenario = ""
     node = read_node(scenario, n_building)
@@ -510,8 +510,9 @@ def compute(node, params, par_rh, init_val, n_opt, options):
 
     return_surplus = res_p_sell["chp"][n_opt]+res_p_sell["pv"][n_opt]
     return_demand = res_p_imp[n_opt]
-    return_soc = res_soc["bat"][n_opt]
-    return_string = f"surplus:{return_surplus}, demand:{return_demand}, res_soc:{return_soc}"
+    return_soc_tes = res_soc["tes"][n_opt]
+    return_soc_bat = res_soc["bat"][n_opt]
+    return_string = f"surplus:{return_surplus}, demand:{return_demand}, res_soc_tes:{return_soc_tes}, res_soc_bat:{return_soc_bat}"
     return return_string
 
 

@@ -1,10 +1,22 @@
-{
-  "type": "Number",
-  "name": "soc_BUILDING_ID",
-  "label": "Soc BUILDING_ID",
-  "category": "",
-  "tags": ["soc"],
-  "groupNames": [
-    "building_BUILDING_ID"
-  ]
-}
+[
+  {
+    "type": "Number",
+    "name": "soc_tes_BUILDING_ID",
+    "label": "Soc TES BUILDING_ID",
+    "category": "",
+    "tags": ["soc_tes"],
+    "groupNames": [
+      "building_BUILDING_ID"
+    ]
+  },
+  {
+    "type": "Number",
+    "name": "soc_bat_BUILDING_ID",
+    "label": "Soc Bat BUILDING_ID",
+    "category": "",
+    "tags": ["soc_bat"],
+    "groupNames": [
+      "building_BUILDING_ID"
+    ]
+  }
+]
