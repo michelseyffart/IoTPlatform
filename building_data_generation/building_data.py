@@ -129,7 +129,7 @@ def calculate_opti_results(nodes):
         }}
 
     for n in range(40):
-        opti_res = {}
+        opti_res = dict()
         for n_opt in range(8760):
             return_string = opti.compute(node=nodes[n], params=params, par_rh=par_rh, init_val=init_val,
                                          options=options, n_opt=n_opt)
@@ -142,12 +142,47 @@ def calculate_opti_results(nodes):
             pickle.dump(opti_res, f)
 
 
+def calculate_opti_results_for_months(nodes, months: list):
+    dir_path = Path(path_openhab_container_scripts.joinpath("data", "opti_results", scenario_name))
+    dir_path.mkdir(parents=True, exist_ok=True)
+    with open(path_openhab_container_scripts.joinpath("data/par_rh.p"), "rb") as f:
+        par_rh = pickle.load(f)
+    with open(path_openhab_container_scripts.joinpath("data/params.json"), "rb") as f:
+        params = json.load(f)
+    with open(path_openhab_container_scripts.joinpath("data/options.json"), "rb") as f:
+        options = json.load(f)
+
+    init_val = {
+        "soc": {
+            "tes": 0.0,
+            "bat": 0.0
+        }}
+    for month in months:
+        par_rh["month"] = month
+        month_dir_path = dir_path.joinpath(f"month_{month}")
+        month_dir_path.mkdir(parents=True, exist_ok=True)
+
+        for n in range(40):
+            opti_res = dict()
+
+            for n_opt in range(par_rh["month_start"][month], par_rh["month_start"][month + 1]):
+                return_string = opti.compute(node=nodes[n], params=params, par_rh=par_rh, init_val=init_val,
+                                             options=options, n_opt=n_opt)
+                init_val["soc"]["tes"] = float(return_string.split("res_soc_tes:")[1].split(",")[0])
+                init_val["soc"]["bat"] = float(return_string.split("res_soc_bat:")[1])
+                opti_res[n_opt] = return_string
+                print(f"Finished building {n}, step {n_opt}.")
+            print(f"Finished building {n}.")
+            with open(month_dir_path.joinpath(f"{n}.p"), "wb") as f:
+                pickle.dump(opti_res, f)
+
+
 if __name__ == "__main__":
-    scenario_name = "40_buildings"
+    scenario_name = "40_1"
     districtData = datahandler.Datahandler()
-    districtData.generateDistrictComplete(scenario_name, calcUserProfiles=False, saveUserProfiles=True, )
+    districtData.generateDistrictComplete(scenario_name, calcUserProfiles=False, saveUserProfiles=True)
     districtData.designDevicesComplete(saveGenerationProfiles=True)
 
     nodes, devs = calculate_nodes()
 
-    #calculate_opti_results(nodes=nodes)
+    calculate_opti_results_for_months(nodes=nodes, months=[1, 4, 7])
