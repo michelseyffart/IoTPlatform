@@ -1,0 +1,18 @@
+[
+  {
+    "type": "String",
+    "name": "scenario",
+    "label": "Scenario",
+    "category": "",
+    "tags": ["scenario"],
+    "groupNames": []
+  },
+  {
+    "type": "Number",
+    "name": "month",
+    "label": "Month",
+    "category": "",
+    "tags": ["month"],
+    "groupNames": []
+  }
+]

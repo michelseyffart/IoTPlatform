@@ -69,8 +69,10 @@ payload = {
 actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("data/grid/BUILDING_ID", JSON.stringify(payload), false)
 
 var n_opt = String(n_opt)
+var scenario = items.getItem("scenario").state;
+var month = items.getItem("month").state;
 
-var res = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "python3", "/openhab/pyscripts/scripts/pseudo_opti.py", n_opt, "BUILDING_ID", "SCENARIO");
+var res = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "python3", "/openhab/pyscripts/scripts/pseudo_opti.py", n_opt, "BUILDING_ID", scenario, month);
 
 dem = parseFloat(res.split("demand:")[1].split(",")[0]);
 sur = parseFloat(res.split("surplus:")[1].split(",")[0]);

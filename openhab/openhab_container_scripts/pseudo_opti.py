@@ -18,7 +18,12 @@ def main():
         scenario = sys.argv[3]
     else:
         scenario = ""
-    with data_folder.joinpath("opti_results").joinpath(scenario).joinpath(f"{n_building}.p").open("rb") as f:
+    if len(sys.argv) > 4:
+        month = sys.argv[4]
+    else:
+        month = 0
+    with data_folder.joinpath("opti_results").joinpath(scenario).joinpath(f"month_{month}").joinpath(
+            f"{n_building}.p").open("rb") as f:
         opti_res = pickle.load(f)
     print(opti_res[n_opt])
 

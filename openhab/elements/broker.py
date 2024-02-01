@@ -90,6 +90,40 @@ def delete_items_public_info():
     log.info(f"Deleted Item Equilibrium Price: {rc}")
 
 
+def post_items_opti_options():
+    with open(path_templates_folder/"items"/"items_opti_options.json") as f:
+        items_opti_options = json.load(f)
+    rc = openhab_request(payload=items_opti_options, endpoint=f"/items/", method="PUT")
+    log.info(f"Posted Items Opti Options: {rc}")
+
+    with open(path_templates_folder/"metadata"/"metadata_int.json") as f:
+        metadata_int = json.load(f)
+    rc = openhab_request(payload=metadata_int, endpoint=f"/items/month/metadata/stateDescription",
+                         method="PUT")
+    with open(path_templates_folder/"metadata"/"metadata_string.json") as f:
+        metadata_string = json.load(f)
+    log.info(f"Posted Metadata Scenario: {rc}")
+    rc = openhab_request(payload=metadata_string, endpoint=f"/items/scenario/metadata/stateDescription",
+                         method="PUT")
+    log.info(f"Posted Metadata Month: {rc}")
+
+
+def post_links_opti_options():
+    thing_start_stop_uid = get_from_config(key=f"thing_start_stop_uid")
+
+    channel_uid = f"{thing_start_stop_uid}:scenario"
+    item_name = f"scenario"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Scenario: {rc}")
+
+    channel_uid = f"{thing_start_stop_uid}:month"
+    item_name = f"month"
+    payload = {"itemName": item_name, "channelUID": channel_uid}
+    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    log.info(f"Posted Link Month: {rc}")
+
+
 def delete_broker():
     thing_broker_uid = get_from_config(key="bridge_uid")
     rc = openhab_request(endpoint=f"/things/{thing_broker_uid}", method="DELETE")
@@ -109,11 +143,14 @@ def setup_mqtt_structure():
     post_thing_start_stop()
     post_items_public_info()
     post_links_public_info()
+    post_items_opti_options()
+    post_links_opti_options()
 
 
 def delete_mqtt_structure():
     delete_thing_start_stop()
     delete_broker()
+
 
 if __name__ == "__main__":
     delete_mqtt_structure()

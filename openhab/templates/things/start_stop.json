@@ -66,6 +66,34 @@
       "configuration": {
         "stateTopic": "gateway"
       }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:scenario",
+      "id": "scenario",
+      "channelTypeUID": "mqtt:string",
+      "kind": "STATE",
+      "label": "Scenario",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "scenario"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:month",
+      "id": "month",
+      "channelTypeUID": "mqtt:number",
+      "kind": "STATE",
+      "label": "Month",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "month"
+      }
     }
   ]
 }
