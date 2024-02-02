@@ -1,12 +1,14 @@
 {
-  "time_for_step": 6,
-  "range_for_random_start": 1,
-  "auction_time": 5,
+  "time_for_step": 20,
+  "range_for_random_start": 10,
+  "auction_time": 15,
   "bid_expiration_time": 4,
   "learning_bid": {
-    "min_price": 4,
-    "max_price": 30,
-    "step_width": 1
+    "min_price": 8,
+    "max_price": 45,
+    "step_width": 1,
+    "recency": 0.08,
+    "experimental": 0.99
   },
-  "scenario": "half_pv"
+  "scenario": "40_1"
 }
