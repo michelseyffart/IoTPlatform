@@ -22,6 +22,15 @@ def setup_everything(buildings: list, pre_optimized: bool):
         setup_building(building, pre_optimized=pre_optimized)
 
 
+def set_up_general_elements():
+    setup_mqtt_structure()
+
+
+def set_up_buildings(buildings: list, pre_optimized: bool):
+    for building in buildings:
+        setup_building(building, pre_optimized=pre_optimized)
+
+
 def reset():
     clear_everything()
     time.sleep(2)

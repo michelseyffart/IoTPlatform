@@ -1,13 +1,14 @@
 import logging
 
 import paho.mqtt.client as mqtt
-from openhab.setup import *
+import openhab.setup as setup
 import logs.create_logger as logs
 import market.coordinator as coordinator
 import datetime
 import openhab.config.config as config
 import data_collection.collector as collector
 import time
+import json
 
 log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
@@ -23,17 +24,58 @@ initial_values = {
     "learning_bid_prop": 0.01
 }
 
-buildings = [str(x) for x in range(20)]
+scenario_options = {
+    "scenario": "40_1",
+    "month": 1
+}
+
+buildings = [str(x) for x in range(40)]
+buildings.append("WT")
 
 
-def set_initial_values():
+def set_initial_values(buildings_: list):
     log.info("Setting initial values")
-    for building in buildings:
+    for building in buildings_:
         for key in initial_values.keys():
             mqttc.publish(topic=f"{building}/{key}", payload=f"{initial_values[key]}")
     time.sleep(1)
     log.info("Set initial values")
     return
+
+
+def set_scenario_options():
+    log.info("Setting scenario options")
+    for key, value in scenario_options.items():
+        mqttc.publish(topic=key, payload=value)
+    time.sleep(1)
+    log.info(f"Set scenario options to {scenario_options}.")
+    return
+
+
+def set_gateways(value):
+    log.info(f"Setting gateways to {value}.")
+    mqttc.publish(topic="gateway", payload=value)
+
+
+def send_dummy_transactions(buildings_: list):
+    log.info(f"Sending dummy transactions.")
+    dummy_bid = {
+        "buying": False,
+        "price": 0.15,
+        "quant": 100
+    }
+    for building in buildings_:
+        mqttc.publish(topic=f"transactions/Transaction:{building}", payload=json.dumps(dummy_bid))
+    log.info(f"Sent dummy transactions.")
+
+
+def send_dummy_public_info():
+    log.info(f"Sending dummy public info to trigger bid adjustment.")
+    dummy_public_info = {
+        "equilibrium_price": 0.3,
+        "equilibrium_quantity": 200
+    }
+    mqttc.publish(topic=f"public_info", payload=json.dumps(dummy_public_info))
 
 
 def start_buildings():
@@ -48,15 +90,15 @@ def stop_buildings():
     log.info("Stopped buildings")
 
 
-def setup(pre_optimized: bool = False):
-    log.info("Setting up openHAB")
-    setup_everything(buildings=buildings, pre_optimized=pre_optimized)
+def complete_setup(buildings_: list, pre_optimized: bool = False):
+    log.info(f"Setting up openHAB")
+    setup.setup_everything(buildings=buildings_, pre_optimized=pre_optimized)
     log.info("Set up complete")
 
 
 def clear():
     log.info("Clearing openHAB")
-    hard_clear()
+    setup.hard_clear()
     log.info("Clearing complete")
 
 
@@ -72,23 +114,47 @@ def run_simulation(clearing_mechanism: str, duration: int = 180):
     start_buildings()
     time.sleep(1)
     c.coordinator_loop(duration=duration, clearing_mechanism=clearing_mechanism)
-    time.sleep(0.2)
+    time.sleep(5)
     stop_buildings()
     time.sleep(2)
     data_collector.stop()
 
 
 def setup_run_and_clear(clearing_mechanism: str, duration: int = 180):
-    setup()
+    complete_setup(buildings_=buildings)
     time.sleep(5)
-    set_initial_values()
+    set_initial_values(buildings_=buildings)
     run_simulation(duration=duration, clearing_mechanism=clearing_mechanism)
     clear()
 
 
+def set_up_sequence(pre_optimized):
+    log.info(f"Setting up general elements")
+    setup.setup_mqtt_structure()
+    set_scenario_options()
+    for i, building in enumerate(buildings):
+        log.info(f"Setting up building {building}")
+        setup.set_up_buildings(buildings=[building], pre_optimized=pre_optimized)
+        set_initial_values(buildings_=[building])
+        set_gateways("OFF")
+        send_dummy_transactions(buildings_=[building])
+        start_buildings()
+        time.sleep(15)
+        stop_buildings()
+        if i % 5 == 1:
+            time.sleep(10)
+            send_dummy_public_info()
+            time.sleep(30)
+    time.sleep(30)
+    start_buildings()
+    set_gateways("ON")
+    time.sleep(60)
+    stop_buildings()
+    time.sleep(30)
+
+    log.info(f"Setup complete")
+
+
 if __name__ == "__main__":
     clear()
-    setup(pre_optimized=True)
-    set_initial_values()
-    run_simulation(duration=60, clearing_mechanism="d")
-    #clear()
+    set_up_sequence(pre_optimized=True)
