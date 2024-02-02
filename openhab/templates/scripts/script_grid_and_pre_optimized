@@ -1,8 +1,8 @@
 function updateProps(buying, quant, price) {
-  var rec = 0.08;
-  var exp = 0.995;
-  var minPrice = 4;
-  var maxPrice = 30;
+  var rec = RECENCY;
+  var exp = EXPERIMENTAL;
+  var minPrice = 0.0811;
+  var maxPrice = 0.4573;
   var bidPrice = parseInt(items.getItem("price_BUILDING_ID").state*100);
   var bidQuantity = parseFloat(items.getItem("quant_BUILDING_ID").state);
   var bidBuying = items.getItem("buying_BUILDING_ID").state === "true";

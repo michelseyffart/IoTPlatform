@@ -109,6 +109,8 @@ def post_rule_timer(building_id: str, pre_optimized):
     rule_timer_uid = str(uuid.uuid4()).split("-")[0]
     param_time_for_step = get_from_params("time_for_step")
     param_random_start = get_from_params("range_for_random_start")
+    param_recency = get_from_params("learning_bid/recency")
+    param_experimental = get_from_params("learning_bid/experimental")
     scenario = get_from_params("scenario")
     random_start = random.randint(0, param_random_start)
     template_rule_timer = template_rule_timer.replace(
@@ -123,7 +125,9 @@ def post_rule_timer(building_id: str, pre_optimized):
         script_pre_optimized = script_pre_optimized_template.replace(
             "BRIDGE_UID", bridge_uid).replace(
             "BUILDING_ID", building_id).replace(
-            "SCENARIO", scenario)
+            "SCENARIO", scenario).replace(
+            "RECENCY", param_recency).replace(
+            "EXPERIMENTAL", param_experimental)
         rule_timer = json.loads(template_rule_timer)
         rule_timer["actions"][0]["configuration"]["script"] = script_pre_optimized
     else:
@@ -132,7 +136,9 @@ def post_rule_timer(building_id: str, pre_optimized):
         script_grid_and_opti = script_grid_and_opti_template.replace(
             "BRIDGE_UID", bridge_uid).replace(
             "BUILDING_ID", building_id).replace(
-            "SCENARIO", scenario)
+            "SCENARIO", scenario).replace(
+            "RECENCY", param_recency).replace(
+            "EXPERIMENTAL", param_experimental)
         rule_timer = json.loads(template_rule_timer)
         rule_timer["actions"][0]["configuration"]["script"] = script_grid_and_opti
     save_to_config(key=f"rule_timer_{building_id}_uid", value=rule_timer_uid)
