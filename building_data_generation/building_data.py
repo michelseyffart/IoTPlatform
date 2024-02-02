@@ -113,7 +113,7 @@ def calculate_nodes():
 
 
 def calculate_opti_results(nodes):
-    dir_path = Path(path_openhab_container_scripts.joinpath("data", "opti_results", scenario_name))
+    dir_path = Path(path_openhab_container_scripts.joinpath("data", "opti_results", "0", scenario_name))
     dir_path.mkdir(parents=True, exist_ok=True)
     with open(path_openhab_container_scripts.joinpath("data/par_rh.p"), "rb") as f:
         par_rh = pickle.load(f)
@@ -138,8 +138,8 @@ def calculate_opti_results(nodes):
             opti_res[n_opt] = return_string
             print(f"Finished building {n}, step {n_opt}.")
         print(f"Finished building {n}.")
-        with open(dir_path.joinpath(f"{n}.p"), "wb") as f:
-            pickle.dump(opti_res, f)
+        with open(dir_path.joinpath(f"{n}.json"), "w") as f:
+            json.dump(opti_res, f, indent=2)
 
 
 def calculate_opti_results_for_months(nodes, months: list):
@@ -173,8 +173,8 @@ def calculate_opti_results_for_months(nodes, months: list):
                 opti_res[n_opt] = return_string
                 print(f"Finished building {n}, step {n_opt}.")
             print(f"Finished building {n}.")
-            with open(month_dir_path.joinpath(f"{n}.p"), "wb") as f:
-                pickle.dump(opti_res, f)
+            with open(month_dir_path.joinpath(f"{n}.json"), "w") as f:
+                json.dump(opti_res, f, indent=2)
 
 
 if __name__ == "__main__":
