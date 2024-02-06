@@ -5,6 +5,7 @@ import datetime
 from pathlib import Path
 import logs.create_logger as logs
 import logging
+import fiware.config.config as fiware_config
 
 
 class MQTTCollector:
@@ -13,9 +14,10 @@ class MQTTCollector:
         folder = Path(__file__).parent.joinpath("rawdata_MQTT").resolve()
         time_now = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.file_name = folder.joinpath(f"{time_now}.p")
+        url_mosquitto = fiware_config.get_from_config("url_mosquitto")
         self.mqttc = mqtt.Client()
         self.mqttc.on_message = self.on_message
-        self.mqttc.connect("137.226.248.250")
+        self.mqttc.connect(url_mosquitto)
         self.mqttc.subscribe("data/#")
         self.log.info("Created MQTT data collector")
 

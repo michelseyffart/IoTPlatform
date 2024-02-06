@@ -8,13 +8,15 @@ from requests import Session
 import requests.exceptions
 import logs.create_logger as logs
 import logging
+import fiware.config.config as fiware_config
 
 
 class FiwareInterface:
 
     def __init__(self):
-        self.CB_URL = "http://137.226.248.250:1026"
-        self.IOTA_URL = "http://137.226.248.250:4041"
+        url_fiware = fiware_config.get_from_config("url_fiware")
+        self.CB_URL = f"http://{url_fiware}:1026"
+        self.IOTA_URL = f"http://{url_fiware}:4041"
         self.FIWARE_HEADER = FiwareHeader(service="iotplatform", service_path="/")
         self.s = Session()
         self.cbc = ContextBrokerClient(url=self.CB_URL, fiware_header=self.FIWARE_HEADER, session=self.s)

@@ -9,11 +9,13 @@ import openhab.config.config as config
 import data_collection.collector as collector
 import time
 import json
+import fiware.config.config as fiware_config
 
 log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
+url_mosquitto = fiware_config.get_from_config("url_mosquitto")
 mqttc = mqtt.Client()
-mqttc.connect("137.226.248.250")
+mqttc.connect(url_mosquitto)
 
 initial_values = {
     "n_opt": 0,

@@ -20,7 +20,7 @@
     "qos": 0,
     "reconnectTime": 60000,
     "mqttVersion": "V3",
-    "host": "137.226.248.250",
+    "host": "URL_MOSQUITTO",
     "lwtRetain": true,
     "enableDiscovery": true
   },

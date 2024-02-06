@@ -12,7 +12,10 @@ def post_broker():
         template_thing_mqtt_broker = f.read()
     uid = str(uuid.uuid4()).split("-")[0]
     bridge_uid = f"mqtt:broker:{uid}"
-    template_thing_mqtt_broker = template_thing_mqtt_broker.replace("THING_MQTT_BROKER_UID", bridge_uid)
+    url_mosquitto = fiware_config.get_from_config("url_mosquitto")
+    template_thing_mqtt_broker = template_thing_mqtt_broker.replace(
+        "THING_MQTT_BROKER_UID", bridge_uid).replace(
+        "URL_MOSQUITTO", url_mosquitto)
     thing_mqtt_broker = json.loads(template_thing_mqtt_broker)
     save_to_config(key="bridge_uid", value=bridge_uid)
     save_to_config(key="bridge_uid_short", value=uid)
