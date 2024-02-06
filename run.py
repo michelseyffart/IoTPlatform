@@ -15,11 +15,13 @@ log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
 url_mosquitto = fiware_config.get_from_config("url_mosquitto")
 mqttc = mqtt.Client()
-mqttc.connect(url_mosquitto)
+mqttc.connect(url_mosquitto, keepalive=3600)
+
 
 initial_values = {
-    "n_opt": 0,
-    "soc": 50,
+    "n_opt": 4344,
+    "soc_bat": 0,
+    "soc_tes": 0,
     "strategy": "learning",
     "total_trans_quant": 0,
     "total_trans_price": 0,
@@ -27,8 +29,8 @@ initial_values = {
 }
 
 scenario_options = {
-    "scenario": "40_1",
-    "month": 1
+    "scenario": "40_2",
+    "month": 7
 }
 
 buildings = [str(x) for x in range(40)]
@@ -40,6 +42,7 @@ def set_initial_values(buildings_: list):
     for building in buildings_:
         for key in initial_values.keys():
             mqttc.publish(topic=f"{building}/{key}", payload=f"{initial_values[key]}")
+        time.sleep(1)
     time.sleep(1)
     log.info("Set initial values")
     return
@@ -83,12 +86,14 @@ def send_dummy_public_info():
 def start_buildings():
     log.info("Starting buildings")
     mqttc.publish(topic="active", payload="start")
+    time.sleep(1)
     log.info("Started buildings")
 
 
 def stop_buildings():
     log.info("Stopping buildings")
     mqttc.publish(topic="active", payload="stop")
+    time.sleep(1)
     log.info("Stopped buildings")
 
 
@@ -109,12 +114,13 @@ def run_simulation(clearing_mechanism: str, duration: int = 180):
     data_collector = collector.MQTTCollector()
     data_collector.start()
     log.info("Waiting to start")
-    time.sleep(len(buildings))
+    time.sleep(len(buildings)/2)
     start_at_second = config.get_from_params("time_for_step")
-    while not int(datetime.datetime.now().strftime("%S")) % 10 == start_at_second - 1:
+    while not int(datetime.datetime.now().strftime("%S")) % start_at_second == start_at_second - 5:
         time.sleep(0.1)
+    set_gateways("ON")
     start_buildings()
-    time.sleep(1)
+    time.sleep(5)
     c.coordinator_loop(duration=duration, clearing_mechanism=clearing_mechanism)
     time.sleep(5)
     stop_buildings()
@@ -131,28 +137,31 @@ def setup_run_and_clear(clearing_mechanism: str, duration: int = 180):
 
 
 def set_up_sequence(pre_optimized):
-    log.info(f"Setting up general elements")
-    setup.setup_mqtt_structure()
+    log.info("Starting Set Up Sequence")
+    complete_setup(buildings_=buildings, pre_optimized=pre_optimized)
+    time.sleep(60)
+    set_gateways("OFF")
+    time.sleep(30)
+    set_initial_values(buildings_=buildings)
     set_scenario_options()
-    for i, building in enumerate(buildings):
-        log.info(f"Setting up building {building}")
-        setup.set_up_buildings(buildings=[building], pre_optimized=pre_optimized)
-        set_initial_values(buildings_=[building])
-        set_gateways("OFF")
-        send_dummy_transactions(buildings_=[building])
-        start_buildings()
-        time.sleep(15)
-        stop_buildings()
-        if i % 5 == 1:
-            time.sleep(10)
-            send_dummy_public_info()
-            time.sleep(30)
     time.sleep(30)
     start_buildings()
-    set_gateways("ON")
-    time.sleep(60)
+    time.sleep(180)
     stop_buildings()
-    time.sleep(30)
+    time.sleep(60)
+    start_buildings()
+    set_gateways("ON")
+    time.sleep(180)
+    stop_buildings()
+    set_gateways("OFF")
+    time.sleep(60)
+    send_dummy_transactions(buildings_=buildings)
+    time.sleep(180)
+    send_dummy_public_info()
+    time.sleep(180)
+    set_gateways("ON")
+    send_dummy_public_info()
+    time.sleep(180)
 
     log.info(f"Setup complete")
 
