@@ -44,12 +44,26 @@ def hard_clear():
         key = concept_with_key[1]
         instances = openhab_request(endpoint=f"/{concept}", method="GET", return_response_text=True)
         instance_names = [instance[key] for instance in json.loads(instances)]
+        delete_at_end = list()
         for instance_name in instance_names:
+            if "broker" in instance_name:
+                delete_at_end.append(instance_name)
+                continue
+            rc = openhab_request(endpoint=f"/{concept}/{instance_name}", method="DELETE")
+            log.info(f"Deleted {concept} {instance_name}: {rc}")
+        for instance_name in delete_at_end:
             rc = openhab_request(endpoint=f"/{concept}/{instance_name}", method="DELETE")
             log.info(f"Deleted {concept} {instance_name}: {rc}")
     rc = openhab_request(endpoint=f"/links/purge", method="POST")
     log.info(f"Deleted links: {rc}")
 
 
+def clear_things_state_removing():
+    instances = openhab_request(endpoint=f"/things", method="GET", return_response_text=True)
+    instance_names = [instance["UID"] for instance in json.loads(instances)]
+    for instance_name in instance_names:
+        rc = openhab_request(endpoint=f"/things/{instance_name}?force=true", method="DELETE")
+
+
 if __name__ == "__main__":
-    clear_everything(["0"])
+    clear_things_state_removing()
