@@ -70,7 +70,7 @@ actions.thingActions("mqtt", "BRIDGE_UID").publishMQTT("data/grid/BUILDING_ID", 
 
 var scenario = items.getItem("scenario").state;
 var month = items.getItem("month").state;
-var file = "/openhab/pyscripts/scripts/data/opti_results/" + scenario + "/month_" + 1 + "/BUILDING_ID.json"
+var file = "/openhab/pyscripts/scripts/data/opti_results/" + scenario + "/month_" + month + "/BUILDING_ID.json"
 var key = '.[\"' + n_opt + '\"]'
 
 var res = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "jq", key, file);
