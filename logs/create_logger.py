@@ -14,6 +14,7 @@ def get_logger(filename: str, name: str, consolelevel=logging.WARNING):
     console.setFormatter(formatter)
 
     logger = logging.getLogger(name)
+    logger.handlers.clear()
     logger.addHandler(handler)
     logger.addHandler(console)
     logger.setLevel(logging.INFO)
