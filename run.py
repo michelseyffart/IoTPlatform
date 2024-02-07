@@ -48,6 +48,7 @@ buildings.append("WT")
 
 
 def set_initial_values(buildings_: list, month_: int = None, scenario_: str = None):
+    set_gateways("OFF")
     log.info("Setting initial values")
     if month_:
         scenario_options["month"] = month_
@@ -56,7 +57,6 @@ def set_initial_values(buildings_: list, month_: int = None, scenario_: str = No
         scenario_options["scenario"] = scenario_
     if not mqttc.is_connected():
         mqttc.reconnect()
-    set_gateways("OFF")
     for building in buildings_:
         for key in initial_values.keys():
             mqttc.publish(topic=f"init_value/{building}/{key}", payload=f"{initial_values[key]}")
@@ -64,9 +64,9 @@ def set_initial_values(buildings_: list, month_: int = None, scenario_: str = No
     for key, value in scenario_options.items():
         mqttc.publish(topic=key, payload=value)
     time.sleep(1)
+    log.info("Set initial values")
     set_gateways("ON")
     time.sleep(1)
-    log.info("Set initial values")
     return
 
 
