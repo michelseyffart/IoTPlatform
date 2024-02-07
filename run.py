@@ -134,7 +134,7 @@ def clear():
 
 def run_simulation(clearing_mechanism: str, duration: int = 180):
     c = coordinator.Coordinator()
-    data_collector = collector.MQTTCollector()
+    data_collector = collector.MQTTCollector(month=month, scenario=scenario, auction_type=auction_type)
     data_collector.start()
     log.info("Waiting to start")
     time.sleep(len(buildings)/2)

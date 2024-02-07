@@ -9,16 +9,20 @@ import fiware.config.config as fiware_config
 
 
 class MQTTCollector:
-    def __init__(self):
+    def __init__(self, month: int, scenario: str, auction_type: str):
         self.log = logs.get_logger(filename="run.log", name="MQTTCollector", consolelevel=logging.INFO)
         folder = Path(__file__).parent.joinpath("rawdata_MQTT").resolve()
-        time_now = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        self.file_name = folder.joinpath(f"{time_now}.p")
+        time_now = datetime.datetime.now().strftime("%m-%d-%H-%M-%S")
+        simulation_id = f"{scenario}-{month}-{auction_type}"
+        self.file_name = folder.joinpath(f"{simulation_id}-{time_now}.p")
         url_mosquitto = fiware_config.get_from_config("url_mosquitto")
         self.mqttc = mqtt.Client()
         self.mqttc.on_message = self.on_message
         self.mqttc.connect(url_mosquitto)
         self.mqttc.subscribe("data/#")
+        self.mqttc.subscribe("json/#")
+        self.mqttc.subscribe("transaction/#")
+        self.mqttc.subscribe("public_info/#")
         self.log.info("Created MQTT data collector")
 
     def start(self):
