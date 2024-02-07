@@ -34,6 +34,7 @@ function updateProps(buying, quant, price) {
     }
     propItem.postUpdate(newProp)
   }
+  console.log("BUILDING_ID: updated learning props")
   return
 }
 
@@ -51,7 +52,7 @@ var to_grid = trans_buying ? sur : sur - trans_quant;
 from_grid = Math.round(from_grid * 100) / 100;
 to_grid = Math.round(to_grid * 100) / 100;
 
-if (items.getItem("strategy_BUILDING_ID").state == "learning") {
+if (items.getItem("strategy_BUILDING_ID").state == "learning" && parseFloat(items.getItem("quant_BUILDING_ID").state) > 0) {
     updateProps(trans_buying, trans_quant, trans_price)
 }
 
