@@ -22,6 +22,10 @@ initial_values = {
     "n_opt": 4344,
     "soc_bat": 0,
     "soc_tes": 0,
+    "demand": 0,
+    "surplus": 0,
+    "price": 0,
+    "quant": 0,
     "strategy": "learning",
     "total_trans_quant": 0,
     "total_trans_price": 0,
@@ -41,7 +45,7 @@ def set_initial_values(buildings_: list):
     log.info("Setting initial values")
     for building in buildings_:
         for key in initial_values.keys():
-            mqttc.publish(topic=f"{building}/{key}", payload=f"{initial_values[key]}")
+            mqttc.publish(topic=f"init_value/{building}/{key}", payload=f"{initial_values[key]}")
         time.sleep(1)
     time.sleep(1)
     log.info("Set initial values")

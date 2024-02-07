@@ -18,7 +18,7 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/soc_tes"
+        "stateTopic": "init_value/BUILDING_ID/soc_tes"
       }
     },
     {
@@ -33,7 +33,7 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/soc_bat"
+        "stateTopic": "init_value/BUILDING_ID/soc_bat"
       }
     },
     {
@@ -48,7 +48,7 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/n_opt"
+        "stateTopic": "init_value/BUILDING_ID/n_opt"
       }
     },
     {
@@ -63,7 +63,7 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/strategy"
+        "stateTopic": "init_value/BUILDING_ID/strategy"
       }
     },
     {
@@ -174,7 +174,7 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/total_trans_price"
+        "stateTopic": "init_value/BUILDING_ID/total_trans_price"
       }
     },
     {
@@ -189,7 +189,7 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/total_trans_quant"
+        "stateTopic": "init_value/BUILDING_ID/total_trans_quant"
       }
     },
     {
@@ -204,7 +204,67 @@
       "defaultTags": [],
       "properties": {},
       "configuration": {
-        "stateTopic": "BUILDING_ID/learning_bid_prop"
+        "stateTopic": "init_value/BUILDING_ID/learning_bid_prop"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:demand_BUILDING_ID",
+      "id": "demand_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Learning Bid Prop BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "init_value/BUILDING_ID/demand"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:surplus_BUILDING_ID",
+      "id": "surplus_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Learning Bid Prop BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "init_value/BUILDING_ID/surplus"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:quant_BUILDING_ID",
+      "id": "quant_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Learning Bid Prop BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "init_value/BUILDING_ID/quant"
+      }
+    },
+    {
+      "linkedItems": [],
+      "uid": "THING_UID:price_BUILDING_ID",
+      "id": "price_BUILDING_ID",
+      "channelTypeUID": "mqtt:number",
+      "itemType": "Number",
+      "kind": "STATE",
+      "label": "Learning Bid Prop BUILDING_ID",
+      "description": "",
+      "defaultTags": [],
+      "properties": {},
+      "configuration": {
+        "stateTopic": "init_value/BUILDING_ID/price"
       }
     }
   ]

@@ -311,17 +311,17 @@ def post_links_transaction(building_id: str):
     rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
     log.info(f"Posted Link Transaction Quantity {building_id}: {rc}")
 
-    channel_uid = f"{thing_building_uid}:total_trans_quant_{building_id}"
-    item_name = f"total_trans_quant_{building_id}"
-    payload = {"itemName": item_name, "channelUID": channel_uid}
-    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
-    log.info(f"Posted Link Total Transaction Quantity {building_id}: {rc}")
+    #channel_uid = f"{thing_building_uid}:total_trans_quant_{building_id}"
+    #item_name = f"total_trans_quant_{building_id}"
+    #payload = {"itemName": item_name, "channelUID": channel_uid}
+    #rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    #log.info(f"Posted Link Total Transaction Quantity {building_id}: {rc}")
 
-    channel_uid = f"{thing_building_uid}:total_trans_price_{building_id}"
-    item_name = f"total_trans_price_{building_id}"
-    payload = {"itemName": item_name, "channelUID": channel_uid}
-    rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
-    log.info(f"Posted Link Total Transaction Price {building_id}: {rc}")
+    #channel_uid = f"{thing_building_uid}:total_trans_price_{building_id}"
+    #item_name = f"total_trans_price_{building_id}"
+    #payload = {"itemName": item_name, "channelUID": channel_uid}
+    #rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+    #log.info(f"Posted Link Total Transaction Price {building_id}: {rc}")
 
 
 def post_rule_transaction(building_id: str):
@@ -507,6 +507,18 @@ def post_rule_bid_adjustment(building_id: str):
     log.info(f"Posted Rule bid_adjustment {building_id}: {rc}")
 
 
+def post_links_init_values(building_id: str):
+    thing_building_uid = get_from_config(key=f"thing_building_{building_id}_uid")
+
+    for item in ["demand", "surplus", "soc_tes", "soc_bat", "n_opt", "strategy", "total_trans_price",
+                 "total_trans_quant", "quant", "price"]:
+        item_name = f"{item}_{building_id}"
+        channel_uid = f"{thing_building_uid}:{item_name}"
+        payload = {"itemName": item_name, "channelUID": channel_uid}
+        rc = openhab_request(payload=payload, endpoint=f"/links/{item_name}/{channel_uid}", method="PUT")
+        log.info(f"Posted Link {item} {building_id}: {rc}")
+
+
 def setup_building(building_id: str, pre_optimized: bool = False):
     post_group(building_id)
     post_item_demand(building_id)
@@ -525,11 +537,12 @@ def setup_building(building_id: str, pre_optimized: bool = False):
     post_items_grid(building_id)
     post_item_gateway(building_id)
     post_thing_building_topic(building_id)
-    post_links_building_values(building_id)
+    #post_links_building_values(building_id)
     post_links_transaction(building_id)
     post_link_gateway(building_id)
     post_items_learning_bid(building_id)
     post_rule_bid_adjustment(building_id)
+    post_links_init_values(building_id)
 
 
 def clear_building(building_id: str):
