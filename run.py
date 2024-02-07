@@ -200,4 +200,5 @@ if __name__ == "__main__":
                 run_simulation(clearing_mechanism=auction_type, duration=30)
                 log.info(f"Finished: auction_type: {auction_type}, scenario: {scenario}, month: {month}")
                 time.sleep(10)
+        collector.save_data_to_secondary_disk()
     mqttc.disconnect()

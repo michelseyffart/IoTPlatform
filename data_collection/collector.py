@@ -2,16 +2,17 @@ import paho.mqtt.client as mqtt
 import time
 import pickle
 import datetime
-from pathlib import Path
 import logs.create_logger as logs
 import logging
 import fiware.config.config as fiware_config
+from openhab.config.paths import path_secondary_disk, path_rawdata_MQTT_folder, path_rawdata_python_folder
+import shutil
 
 
 class MQTTCollector:
     def __init__(self, month: int, scenario: str, auction_type: str):
         self.log = logs.get_logger(filename="run.log", name="MQTTCollector", consolelevel=logging.INFO)
-        folder = Path(__file__).parent.joinpath("rawdata_MQTT").resolve()
+        folder = path_rawdata_MQTT_folder
         time_now = datetime.datetime.now().strftime("%m-%d-%H-%M-%S")
         simulation_id = f"{scenario}-{month}-{auction_type}"
         self.file_name = folder.joinpath(f"{simulation_id}-{time_now}.p")
@@ -45,7 +46,7 @@ class MQTTCollector:
 class PythonCollector:
     def __init__(self):
         self.log = logs.get_logger(filename="run.log", name="PythonCollector", consolelevel=logging.INFO)
-        folder = Path(__file__).parent.joinpath("rawdata_python").resolve()
+        folder = path_rawdata_python_folder
         time_now = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.file_name = folder.joinpath(f"{time_now}.p")
         self.log.info("Created Python data collector")
@@ -55,6 +56,14 @@ class PythonCollector:
         data_to_save = [data, time_now]
         with open(self.file_name, "ab") as f:
             pickle.dump(data_to_save, file=f)
+
+
+def save_data_to_secondary_disk():
+    try:
+        shutil.copytree(path_rawdata_MQTT_folder, path_secondary_disk.joinpath("rawdata_MQTT"), dirs_exist_ok=True)
+        shutil.copytree(path_rawdata_python_folder, path_secondary_disk.joinpath("rawdata_python"), dirs_exist_ok=True)
+    except shutil.Error as e:
+        logging.error(f"Couldn't save data to secondary disk: {e}.")
 
 
 if __name__ == "__main__":
