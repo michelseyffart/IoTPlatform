@@ -15,11 +15,11 @@ log = logs.get_logger(filename="run.log", name="run", consolelevel=logging.INFO)
 
 url_mosquitto = fiware_config.get_from_config("url_mosquitto")
 mqttc = mqtt.Client()
-mqttc.connect(url_mosquitto, keepalive=3600)
+mqttc.connect(url_mosquitto)
 
 
 initial_values = {
-    "n_opt": 4344,
+    "n_opt": 0,
     "soc_bat": 0,
     "soc_tes": 0,
     "demand": 0,
@@ -33,37 +33,48 @@ initial_values = {
 }
 
 scenario_options = {
-    "scenario": "40_2",
-    "month": 7
+    "scenario": "40_1",
+    "month": 1
+}
+
+starting_step_for_month = {
+    1: 0,
+    4: 2160,
+    7: 4344
 }
 
 buildings = [str(x) for x in range(40)]
 buildings.append("WT")
 
 
-def set_initial_values(buildings_: list):
+def set_initial_values(buildings_: list, month_: int = None, scenario_: str = None):
     log.info("Setting initial values")
+    if month_:
+        scenario_options["month"] = month_
+        initial_values["n_opt"] = starting_step_for_month[month_]
+    if scenario_:
+        scenario_options["scenario"] = scenario_
+    if not mqttc.is_connected():
+        mqttc.reconnect()
+    set_gateways("OFF")
     for building in buildings_:
         for key in initial_values.keys():
             mqttc.publish(topic=f"init_value/{building}/{key}", payload=f"{initial_values[key]}")
         time.sleep(1)
+    for key, value in scenario_options.items():
+        mqttc.publish(topic=key, payload=value)
+    time.sleep(1)
+    set_gateways("ON")
     time.sleep(1)
     log.info("Set initial values")
     return
 
 
-def set_scenario_options():
-    log.info("Setting scenario options")
-    for key, value in scenario_options.items():
-        mqttc.publish(topic=key, payload=value)
-    time.sleep(1)
-    log.info(f"Set scenario options to {scenario_options}.")
-    return
-
-
 def set_gateways(value):
-    log.info(f"Setting gateways to {value}.")
+    if not mqttc.is_connected():
+        mqttc.reconnect()
     mqttc.publish(topic="gateway", payload=value)
+    log.info(f"Set gateways to {value}.")
 
 
 def send_dummy_transactions(buildings_: list):
@@ -73,6 +84,8 @@ def send_dummy_transactions(buildings_: list):
         "price": 0.15,
         "quant": 100
     }
+    if not mqttc.is_connected():
+        mqttc.reconnect()
     for building in buildings_:
         mqttc.publish(topic=f"transactions/Transaction:{building}", payload=json.dumps(dummy_bid))
     log.info(f"Sent dummy transactions.")
@@ -84,11 +97,15 @@ def send_dummy_public_info():
         "equilibrium_price": 0.3,
         "equilibrium_quantity": 200
     }
+    if not mqttc.is_connected():
+        mqttc.reconnect()
     mqttc.publish(topic=f"public_info", payload=json.dumps(dummy_public_info))
 
 
 def start_buildings():
     log.info("Starting buildings")
+    if not mqttc.is_connected():
+        mqttc.reconnect()
     mqttc.publish(topic="active", payload="start")
     time.sleep(1)
     log.info("Started buildings")
@@ -96,6 +113,8 @@ def start_buildings():
 
 def stop_buildings():
     log.info("Stopping buildings")
+    if not mqttc.is_connected():
+        mqttc.reconnect()
     mqttc.publish(topic="active", payload="stop")
     time.sleep(1)
     log.info("Stopped buildings")
@@ -147,7 +166,6 @@ def set_up_sequence(pre_optimized):
     set_gateways("OFF")
     time.sleep(30)
     set_initial_values(buildings_=buildings)
-    set_scenario_options()
     time.sleep(30)
     start_buildings()
     time.sleep(180)
@@ -171,5 +189,15 @@ def set_up_sequence(pre_optimized):
 
 
 if __name__ == "__main__":
-    clear()
-    set_up_sequence(pre_optimized=True)
+    #clear()
+    #complete_setup(buildings_=buildings, pre_optimized=True)
+    #set_up_sequence(pre_optimized=True)
+    for auction_type in ["d"]:
+        for scenario in ["40_1", "40_2"]:
+            for month in [1, 4, 7]:
+                log.info(f"Starting: auction_type: {auction_type}, scenario: {scenario}, month: {month}")
+                set_initial_values(buildings_=buildings, scenario_=scenario, month_=month)
+                run_simulation(clearing_mechanism=auction_type, duration=30)
+                log.info(f"Finished: auction_type: {auction_type}, scenario: {scenario}, month: {month}")
+                time.sleep(10)
+    mqttc.disconnect()
