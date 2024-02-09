@@ -68,6 +68,7 @@ def calculate_nodes():
         devs[n]["tes"] = dict(cap=0.0, dT_max=35, min_soc=0.0, eta_tes=0.98, eta_ch=1, eta_dch=1)
 
         devs[n]["tes"]["cap"] = districtData.district[n]['capacities']['TES']
+        devs[n]["bat"]["cap"] = districtData.district[n]['capacities']['BAT']
 
         if districtData.district[n]['capacities']['FC']:
             devs[n]["bz"]["cap"] = districtData.district[n]['capacities']['FC']
@@ -178,7 +179,7 @@ def calculate_opti_results_for_months(nodes, months: list):
 
 
 if __name__ == "__main__":
-    scenario_name = "40_1"
+    scenario_name = "40_3"
     districtData = datahandler.Datahandler()
     districtData.generateDistrictComplete(scenario_name, calcUserProfiles=False, saveUserProfiles=True)
     districtData.designDevicesComplete(saveGenerationProfiles=True)

@@ -1,7 +1,7 @@
 {
   "0": "surplus:0.0, demand:27.62, res_soc_tes:5791.849400755365, res_soc_bat:0.0",
-  "1": "surplus:0.0, demand:27.62, res_soc_tes:3416.8235891359964, res_soc_bat:0.0",
-  "2": "surplus:0.0, demand:27.62, res_soc_tes:902.3663842863534, res_soc_bat:0.0",
+  "1": "surplus:0.0, demand:27.62, res_soc_tes:3416.823589136002, res_soc_bat:0.0",
+  "2": "surplus:0.0, demand:27.62, res_soc_tes:902.3663842863643, res_soc_bat:0.0",
   "3": "surplus:0.0, demand:87.38, res_soc_tes:0.0, res_soc_bat:0.0",
   "4": "surplus:0.0, demand:87.38, res_soc_tes:0.0, res_soc_bat:0.0",
   "5": "surplus:0.0, demand:87.38, res_soc_tes:0.0, res_soc_bat:0.0",
@@ -41,7 +41,7 @@
   "39": "surplus:0.0, demand:381.44, res_soc_tes:0.0, res_soc_bat:0.0",
   "40": "surplus:0.0, demand:677.11, res_soc_tes:0.0, res_soc_bat:0.0",
   "41": "surplus:0.0, demand:343.96, res_soc_tes:0.0, res_soc_bat:0.0",
-  "42": "surplus:0.0, demand:447.42, res_soc_tes:4911.099449486829, res_soc_bat:0.0",
+  "42": "surplus:0.0, demand:447.42, res_soc_tes:0.0, res_soc_bat:0.0",
   "43": "surplus:0.0, demand:226.15, res_soc_tes:0.0, res_soc_bat:0.0",
   "44": "surplus:0.0, demand:266.43, res_soc_tes:0.0, res_soc_bat:0.0",
   "45": "surplus:0.0, demand:379.54, res_soc_tes:0.0, res_soc_bat:0.0",

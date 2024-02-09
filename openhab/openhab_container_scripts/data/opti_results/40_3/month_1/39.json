@@ -1,7 +1,7 @@
 {
   "0": "surplus:0.0, demand:259.38, res_soc_tes:29111.42655905417, res_soc_bat:0.0",
-  "1": "surplus:0.0, demand:854.38, res_soc_tes:19455.165913424113, res_soc_bat:0.0",
-  "2": "surplus:0.0, demand:621.16, res_soc_tes:9385.071150088697, res_soc_bat:0.0",
+  "1": "surplus:0.0, demand:854.38, res_soc_tes:19455.165913424076, res_soc_bat:0.0",
+  "2": "surplus:0.0, demand:621.16, res_soc_tes:9385.071150088668, res_soc_bat:0.0",
   "3": "surplus:0.0, demand:402.96, res_soc_tes:0.0, res_soc_bat:0.0",
   "4": "surplus:0.0, demand:548.36, res_soc_tes:0.0, res_soc_bat:0.0",
   "5": "surplus:0.0, demand:526.08, res_soc_tes:0.0, res_soc_bat:0.0",
