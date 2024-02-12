@@ -33,7 +33,7 @@ def uniform_pricing(df_buy_bids, df_sell_bids):
     q_, b_, s_, price = intersect_stepwise(demand_curve, supply_curve, 0.5)
     if s_ is None or b_ is None:
         q_ = 0
-        price = 0.3
+        price = 0.27
     return q_, price
 '''
     # Sort bids df in ascending order for selling bids and descending order for buying bids
