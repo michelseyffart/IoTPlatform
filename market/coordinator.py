@@ -91,7 +91,7 @@ class Coordinator:
     def whole_iter_auction(self):
         self.log.info("Running iterating auction")
         auction_iteration = 0
-        iteration_limit = 3
+        iteration_limit = 5
         while auction_iteration < iteration_limit:
             bids = self.collect_bids()
             self.book.add_bids(bids=bids)
@@ -102,27 +102,28 @@ class Coordinator:
             self.book.update_public_info(public_info=public_info)
             self.post_public_info()
             auction_iteration += 1
-            time.sleep(0.3)
+            time.sleep(3)
         self.whole_single_auction()
         self.log.info("Auction complete")
 
-    def coordinator_loop(self, clearing_mechanism: str, duration: int = 180):
+    def coordinator_loop(self, start_time: datetime.datetime, clearing_mechanism: str, duration: int = 180):
         self.log.info("Starting coordinator")
-        stop_time = datetime.datetime.now() + datetime.timedelta(seconds=duration)
+        stop_time = start_time + datetime.timedelta(seconds=duration)
+        auction_time = start_time + datetime.timedelta(seconds=self.auction_time)
         if clearing_mechanism in ["discrete", "d"]:
             while datetime.datetime.now() < stop_time:
-                seconds = int(datetime.datetime.now().strftime("%S"))
-                if (seconds - self.auction_time) % self.step_length == 0:
+                if datetime.datetime.now() >= auction_time:
+                    auction_time = auction_time.replace(microsecond=0) + datetime.timedelta(seconds=self.step_length)
                     self.whole_single_auction()
-                    time.sleep(1)
+                    time.sleep(2)
                 time.sleep(0.1)
         elif clearing_mechanism in ["continuous", "c"]:
             while datetime.datetime.now() < stop_time:
                 self.whole_continuous_auction()
         elif clearing_mechanism in ["iterative", "iterating", "i"]:
             while datetime.datetime.now() < stop_time:
-                seconds = int(datetime.datetime.now().strftime("%S"))
-                if (seconds - self.auction_time) % self.step_length == 0:
+                if datetime.datetime.now() >= auction_time:
+                    auction_time = auction_time.replace(microsecond=0) + datetime.timedelta(seconds=self.step_length)
                     self.whole_iter_auction()
                     time.sleep(1)
                 time.sleep(0.1)
