@@ -1,5 +1,5 @@
 var equilibriumPrice = parseFloat(items.getItem("equilibrium_price").state)
-var oldBidPrice = parseFloat(items.getItem("price_BUILDING_ID").state)
+var oldBidPrice = parseFloat(items.getItem("adjusted_price_BUILDING_ID").state)
 
 var newBidPrice = oldBidPrice + ((equilibriumPrice - oldBidPrice) * 0.2)
 newBidPrice = Math.round(newBidPrice * 100) / 100

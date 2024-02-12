@@ -529,7 +529,7 @@ def setup_building(building_id: str, pre_optimized: bool = False):
     post_link_active_switch(building_id)
     post_rule_timer(building_id, pre_optimized=pre_optimized)
     post_rule_bid(building_id)
-    post_rule_bid_to_fiware(building_id)
+    #post_rule_bid_to_fiware(building_id)
     post_rule_adjusted_bid_to_fiware(building_id)
     post_rule_transaction(building_id)
     post_items_bid(building_id)

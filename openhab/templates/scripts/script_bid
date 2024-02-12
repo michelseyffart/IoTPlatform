@@ -47,5 +47,6 @@ if (strat == "learning") {
 items.getItem("buying_BUILDING_ID").postUpdate(String(buying));
 items.getItem("quant_BUILDING_ID").postUpdate(quant);
 items.getItem("price_BUILDING_ID").postUpdate(bidPrice);
+items.getItem("adjusted_price_BUILDING_ID").postUpdate(bidPrice);
 
 console.log("BUILDING_ID: created bid");
