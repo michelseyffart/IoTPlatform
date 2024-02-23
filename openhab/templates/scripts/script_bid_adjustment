@@ -1,6 +1,21 @@
 var equilibriumPrice = parseFloat(items.getItem("equilibrium_price").state)
 var oldBidPrice = parseFloat(items.getItem("adjusted_price_BUILDING_ID").state)
+var bidBuying = (items.getItem("buying_BUILDING_ID").state == "true")
 
-var newBidPrice = oldBidPrice + ((equilibriumPrice - oldBidPrice) * 0.2)
+
+if (oldBidPrice <= equilibriumPrice) {
+  var lambda = bidBuying ? 1.2 : 0.2;
+}
+else {
+  var lambda = bidBuying ? 0.2 : 1.2;
+}
+
+var newBidPrice = oldBidPrice + ((equilibriumPrice - oldBidPrice) * lambda)
 newBidPrice = Math.round(newBidPrice * 100) / 100
+if (newBidPrice < 0.08) {
+  newBidPrice = 0.08;
+}
+if (newBidPrice > 0.45) {
+  newBidPrice = 0.45;
+}
 items.getItem("adjusted_price_BUILDING_ID").postUpdate(newBidPrice)
