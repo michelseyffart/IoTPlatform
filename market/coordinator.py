@@ -101,6 +101,7 @@ class Coordinator:
                                                                   selling_bids=self.book.selling_bids)
             self.book.update_public_info(public_info=public_info)
             self.post_public_info()
+            self.book.clear_book()
             auction_iteration += 1
             time.sleep(3)
         self.whole_single_auction()
