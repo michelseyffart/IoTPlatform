@@ -9,3 +9,4 @@ path_data_collection = Path(__file__).parent.parent.parent.joinpath("data_collec
 path_rawdata_MQTT_folder = path_data_collection.joinpath("rawdata_MQTT").resolve()
 path_rawdata_python_folder = path_data_collection.joinpath("rawdata_python").resolve()
 path_secondary_disk = Path("J:/BA/Python/Auswertungsdaten")
+path_analysis_data = Path(__file__).parent.parent.parent.joinpath("analysis", "data").resolve()
