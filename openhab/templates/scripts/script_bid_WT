@@ -1,0 +1,15 @@
+var dem = parseFloat(items.getItem("demand_WT").state);
+var sur = parseFloat(items.getItem("surplus_WT").state);
+var quant = Math.abs(dem - sur);
+var buying = dem > sur;
+var strat = items.getItem("strategy_WT").state;
+var bidPrice = 0
+
+var bidPrice = 0.45 - 0.07 * Math.log(1 + 0.0385 * quant)
+
+items.getItem("buying_WT").postUpdate(String(buying));
+items.getItem("quant_WT").postUpdate(quant);
+items.getItem("price_WT").postUpdate(bidPrice);
+items.getItem("adjusted_price_WT").postUpdate(bidPrice);
+
+console.log("WT: created bid");

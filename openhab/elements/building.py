@@ -198,14 +198,19 @@ def post_rule_bid(building_id: str):
         template_rule_bid = f.read()
     with open(path_templates_folder/"scripts"/"script_bid") as f:
         script_bid_template = f.read()
+    with open(path_templates_folder/"scripts"/"script_bid_WT") as f:
+        script_bid_wt_template = f.read()
     rule_bid_uid = str(uuid.uuid4()).split("-")[0]
     template_rule_bid = template_rule_bid.replace(
         "RULE_BID_UID", rule_bid_uid).replace(
         "BUILDING_ID", building_id)
     bridge_uid = get_from_config(key="bridge_uid")
-    script_bid = script_bid_template.replace("BUILDING_ID", building_id)
     rule_bid = json.loads(template_rule_bid)
-    rule_bid["actions"][0]["configuration"]["script"] = script_bid
+    if building_id == "WT":
+        rule_bid["actions"][0]["configuration"]["script"] = script_bid_wt_template
+    else:
+        script_bid = script_bid_template.replace("BUILDING_ID", building_id)
+        rule_bid["actions"][0]["configuration"]["script"] = script_bid
     save_to_config(key=f"rule_bid_{building_id}_uid", value=rule_bid_uid)
     rc = openhab_request(payload=rule_bid, endpoint="/rules", method="POST")
     log.info(f"Posted Rule Bid {building_id}: {rc}")
