@@ -76,8 +76,8 @@ var key = '.[\"' + n_opt + '\"]'
 
 var res = actions.Exec.executeCommandLine(time.Duration.ofSeconds(5), "jq", key, file);
 
-dem = parseFloat(res.split("demand:")[1].split(",")[0]);
-sur = parseFloat(res.split("surplus:")[1].split(",")[0]);
+dem = parseFloat(res.split("demand:")[1].split(",")[0]) / 1000;
+sur = parseFloat(res.split("surplus:")[1].split(",")[0]) / 1000;
 soc_tes = parseFloat(res.split("soc_tes:")[1].split(",")[0]);
 soc_bat = parseFloat(res.split("soc_bat:")[1]);
 
