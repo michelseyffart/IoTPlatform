@@ -1,0 +1,166 @@
+config:
+  label: Overview
+blocks:
+  - component: oh-block
+    config:
+      title: Control Switches
+    slots:
+      default:
+        - component: oh-grid-row
+          config: {}
+          slots:
+            default:
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-toggle-card
+                      config:
+                        title: Activity
+                        item: active_switch_0
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-toggle-card
+                      config:
+                        title: Gateway
+                        item: gateway_0
+  - component: oh-block
+    config:
+      title: HEMS
+    slots:
+      default:
+        - component: oh-grid-row
+          config: {}
+          slots:
+            default:
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Demand
+                        item: demand_0
+                        label: =Math.round(items.demand_0.state*100)/100 + " kWh"
+                        trendItem: demand_0
+                        action: analyzer
+                        actionAnalyzerItems:
+                          - demand_0
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Surplus
+                        item: surplus_0
+                        label: =Math.round(items.surplus_0.state*100)/100 + " kWh"
+                        trendItem: surplus_0
+                        action: analyzer
+                        actionAnalyzerItems:
+                          - surplus_0
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: SOC TES
+                        label: =Math.round(items.soc_tes_0.state*100)/100 + " kWh"
+                        item: soc_tes_0
+                        trendItem: soc_tes_0
+                        action: analyzer
+                        actionAnalyzerItems:
+                          - soc_tes_0
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: SOC BAT
+                        item: soc_bat_0
+                        label: =Math.round(items.soc_bat_0.state*100)/100 + " kWh"
+                        trendItem: soc_bat_0
+                        action: analyzer
+                        actionAnalyzerItems:
+                          - soc_bat_0
+  - component: oh-block
+    config:
+      title: Last Bid
+    slots:
+      default:
+        - component: oh-grid-row
+          config: {}
+          slots:
+            default:
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Bid Type
+                        label: '=(items.buying_0.state == true) ? "Buying" : "Selling"'
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Bid Price
+                        item: price_0
+                        label: =items.price_0.state + " €/kWh"
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Bid Quantity
+                        item: quant_0
+                        label: =Math.round(items.quant_0.state*100)/100 + "  kWh"
+  - component: oh-block
+    config: {}
+    slots:
+      default: []
+  - component: oh-block
+    config:
+      title: Last Transactions
+    slots:
+      default:
+        - component: oh-grid-row
+          config: {}
+          slots:
+            default:
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Transaction Type
+                        item: trans_buying_0
+                        label: '=(items.trans_buying_0.state == true) ? "Buying" : "Selling"'
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Transaction Cost or Revenue
+                        item: trans_price_0
+                        label: =Math.round(items.trans_price_0.state*100)/100 + " €"
+              - component: oh-grid-col
+                config: {}
+                slots:
+                  default:
+                    - component: oh-label-card
+                      config:
+                        title: Transaction Quantity
+                        item: trans_quant_0
+                        label: =Math.round(items.trans_quant_0.state*100)/100 + " kWh"
+masonry: null
+grid: null
