@@ -93,7 +93,7 @@ class Coordinator:
     def whole_iter_auction(self):
         self.log.info("Running iterating auction")
         auction_iteration = 0
-        iteration_limit = 5
+        iteration_limit = 3
         while auction_iteration < iteration_limit:
             bids = self.collect_bids()
             self.book.add_bids(bids=bids)
@@ -105,7 +105,7 @@ class Coordinator:
             self.post_public_info()
             self.book.clear_book()
             auction_iteration += 1
-            time.sleep(3)
+            time.sleep(2)
         self.whole_single_auction()
         self.log.info("Auction complete")
 

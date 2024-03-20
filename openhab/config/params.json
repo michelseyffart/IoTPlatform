@@ -1,8 +1,8 @@
 {
-  "time_for_step": 30,
-  "range_for_random_start": 7,
-  "auction_time": 11,
-  "bid_expiration_time": 18,
+  "time_for_step": 6,
+  "range_for_random_start": 2,
+  "auction_time": 4,
+  "bid_expiration_time": 5,
   "learning_bid": {
     "min_price": 8,
     "max_price": 45,

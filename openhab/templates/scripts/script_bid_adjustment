@@ -4,10 +4,10 @@ var bidBuying = (items.getItem("buying_BUILDING_ID").state == "true")
 
 
 if (oldBidPrice <= equilibriumPrice) {
-  var lambda = bidBuying ? 1.2 : 0.2;
+  var lambda = bidBuying ? 0.2 : 0.2;
 }
 else {
-  var lambda = bidBuying ? 0.2 : 1.2;
+  var lambda = bidBuying ? 0.2 : 0.2;
 }
 
 var newBidPrice = oldBidPrice + ((equilibriumPrice - oldBidPrice) * lambda)
