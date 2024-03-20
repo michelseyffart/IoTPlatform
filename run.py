@@ -190,15 +190,15 @@ def set_up_sequence(pre_optimized):
 
 
 if __name__ == "__main__":
-    #clear()
+    clear()
+    set_up_sequence(pre_optimized=True)
     #complete_setup(buildings_=buildings, pre_optimized=True)
-    #set_up_sequence(pre_optimized=True)
-    for auction_type in ["d"]:
-        for scenario in ["40_1", "40_2"]:
+    for auction_type in ["d", "c", "i"]:
+        for scenario in ["40_1", "40_2", "40_3"]:
             for month in [1, 4, 7]:
                 log.info(f"Starting: auction_type: {auction_type}, scenario: {scenario}, month: {month}")
                 set_initial_values(buildings_=buildings, scenario_=scenario, month_=month)
-                run_simulation(clearing_mechanism=auction_type, duration=30)
+                run_simulation(clearing_mechanism=auction_type, duration=750*config.get_from_params("time_for_step"))
                 log.info(f"Finished: auction_type: {auction_type}, scenario: {scenario}, month: {month}")
                 time.sleep(10)
             collector.save_data_to_secondary_disk()
