@@ -137,8 +137,8 @@ def post_rule_timer(building_id: str, pre_optimized):
             "BRIDGE_UID", bridge_uid).replace(
             "BUILDING_ID", building_id).replace(
             "SCENARIO", scenario).replace(
-            "RECENCY", param_recency).replace(
-            "EXPERIMENTAL", param_experimental)
+            "RECENCY", str(param_recency)).replace(
+            "EXPERIMENTAL", str(param_experimental))
         rule_timer = json.loads(template_rule_timer)
         rule_timer["actions"][0]["configuration"]["script"] = script_grid_and_opti
     save_to_config(key=f"rule_timer_{building_id}_uid", value=rule_timer_uid)

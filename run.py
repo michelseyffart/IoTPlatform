@@ -139,11 +139,12 @@ def run_simulation(clearing_mechanism: str, duration: int = 180):
     log.info("Waiting to start")
     time.sleep(len(buildings)/2)
     start_time = datetime.datetime.now().replace(second=0) + datetime.timedelta(minutes=1)
-    while datetime.datetime.now() < (start_time - datetime.timedelta(seconds=5)):
+    while datetime.datetime.now() < (start_time - datetime.timedelta(seconds=2)):
         time.sleep(0.1)
     set_gateways("ON")
     start_buildings()
     time.sleep(5)
+    mqttc.disconnect()
     c.coordinator_loop(start_time=start_time, duration=duration, clearing_mechanism=clearing_mechanism)
     time.sleep(5)
     stop_buildings()
