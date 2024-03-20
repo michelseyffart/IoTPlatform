@@ -7,6 +7,8 @@ import openhab.config.config as config
 from fiware.fiware_interface import FiwareInterface
 import logs.create_logger as logs
 import logging
+from market.transaction import TransactionInfo
+from market.public_info import PublicInfo
 
 
 class Coordinator:
@@ -107,6 +109,20 @@ class Coordinator:
         self.whole_single_auction()
         self.log.info("Auction complete")
 
+    def dummy_auction(self):
+
+        public_info = PublicInfo(equilibrium_price=0.3, equilibrium_quantity=3000)
+        for i in range(5):
+            self.fiware.update_public_info(public_info=public_info)
+            time.sleep(3)
+        for i in range(3):
+            transaction_info = TransactionInfo(id_="0")
+            transaction_info.cost_revenue_res = 300
+            transaction_info.quantity_res = 1000
+            transaction_info.buying = True
+            self.fiware.update_transaction(transaction_info=transaction_info)
+            time.sleep(10)
+
     def coordinator_loop(self, start_time: datetime.datetime, clearing_mechanism: str, duration: int = 180):
         self.log.info("Starting coordinator")
         stop_time = start_time + datetime.timedelta(seconds=duration)
@@ -116,6 +132,14 @@ class Coordinator:
                 if datetime.datetime.now() >= auction_time:
                     auction_time = auction_time.replace(microsecond=0) + datetime.timedelta(seconds=self.step_length)
                     self.whole_single_auction()
+                    time.sleep(2)
+                time.sleep(0.1)
+        elif clearing_mechanism in ["f"]:
+            while datetime.datetime.now() < stop_time:
+                if datetime.datetime.now() >= auction_time:
+                    auction_time = auction_time.replace(microsecond=0) + datetime.timedelta(
+                        seconds=self.step_length)
+                    self.dummy_auction()
                     time.sleep(2)
                 time.sleep(0.1)
         elif clearing_mechanism in ["continuous", "c"]:
@@ -132,6 +156,4 @@ class Coordinator:
 
 if __name__ == "__main__":
     c = Coordinator()
-    c.coordinator_loop(duration=30, clearing_mechanism="continuous")
-    #c.whole_continuous_auction()
-
+    c.dummy_auction()
