@@ -55,6 +55,7 @@ def parse_rawdata_mqtt_to_pandas_df(file_name: str):
                 optis.append(opti)
             else:
                 print(f"{opti['n_opt']} out of range.")
+                break
 
     bid_columns = ["building", "buying", "price", "quantity", "bid_time", "time_received"]
     bid_df = pd.DataFrame(data=bids, columns=bid_columns)
@@ -163,7 +164,7 @@ def accumulate_transactions(cases: str | list, buildings: str | list):
             interval_and_start = pickle.load(f)
         interval_length = interval_and_start["interval"]
         for building in buildings:
-            start = interval_and_start["building_start"][building] - pd.Timedelta("0.8s")
+            start = interval_and_start["building_start"][building] - pd.Timedelta("0.3s")
             grouper = pd.Grouper(key="time_received", freq=f"{interval_length}s", origin=start)
             buying_transaction_df = load_from_csv(file_name=f"{building}_buying_transactions",
                                                   folder=f"{case}/transactions")
@@ -196,8 +197,8 @@ def calculate_interval_and_start_of_case(cases: str | list, buildings: str | lis
             interval_length = None
         building_start = dict()
         for building in buildings:
-            start_time = (opti_df.loc[opti_df["building"] == building].iloc[1]["time_received"] -
-                          dt.timedelta(seconds=interval_length))
+            start_time = (opti_df.loc[opti_df["building"] == building].iloc[2]["time_received"] -
+                          2 * dt.timedelta(seconds=interval_length))
             building_start[building] = start_time
         payload = {
             "interval": interval_length,

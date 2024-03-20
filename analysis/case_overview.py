@@ -2,11 +2,14 @@ import pandas as pd
 from csv_handling import load_from_csv, save_to_csv
 
 
-def demand_surplus_transaction_grid(cases: str | list, buildings: str | list):
+def demand_surplus_transaction_grid(cases: str | list, buildings: str | list, without_WT: bool = False):
     if isinstance(cases, str):
         cases = [cases]
     if isinstance(buildings, str):
         buildings = [buildings]
+
+    if without_WT:
+        buildings.remove("WT")
 
     for case in cases:
         case_list = list()
@@ -27,5 +30,9 @@ def demand_surplus_transaction_grid(cases: str | list, buildings: str | list):
             })
         case_columns = list(case_list[0].keys())
         case_df = pd.DataFrame(case_list, columns=case_columns)
-        save_to_csv(df=case_df, file_name=case, folder="case_overviews")
+        if without_WT:
+            folder = f"case_overviews_without_WT"
+        else:
+            folder = "case_overviews"
+        save_to_csv(df=case_df, file_name=case, folder=folder)
         print(f"Saved case overview {case}.")

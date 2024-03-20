@@ -3,12 +3,16 @@ import pandas as pd
 from csv_handling import load_from_csv, save_to_csv
 
 
-def demand_surplus_transaction_grid(cases: str | list):
+def demand_surplus_transaction_grid(cases: str | list, without_WT: bool = False):
     if isinstance(cases, str):
         cases = [cases]
     case_list = list()
+    if without_WT:
+        folder = f"case_overviews_without_WT"
+    else:
+        folder = "case_overviews"
     for case in cases:
-        case_df = load_from_csv(file_name=case, folder="case_overviews")
+        case_df = load_from_csv(file_name=case, folder=folder)
         case_list.append({
             "case": case,
             "scenario": case.split("-")[0],
@@ -28,4 +32,21 @@ def demand_surplus_transaction_grid(cases: str | list):
         })
     columns = list(case_list[0].keys())
     overview_df = pd.DataFrame(data=case_list, columns=columns)
+    if without_WT:
+        file_name = f"overview_without_WT"
+    else:
+        file_name = "overview"
+    save_to_csv(df=overview_df, file_name=file_name)
+
+
+def wt_bid_price_mean(cases: str | list):
+    if isinstance(cases, str):
+        cases = [cases]
+    case_list = list()
+    overview_df = load_from_csv("overview")
+    mean_prices = list()
+    for case in cases:
+        bid_df = load_from_csv(file_name="WT_selling_bids", folder=f"{case}/bids")
+        mean_prices.append(bid_df["price"].mean())
+    overview_df["wt bid price mean"] = mean_prices
     save_to_csv(df=overview_df, file_name="overview")
